@@ -447,9 +447,40 @@ else:
 
     elif menu_selection == "Contact Teacher":
         st.title("👩‍🏫 Contact Teacher")
+        st.write("Have a question or message for your teacher? Send it directly here:")
+        
+        student_sender = st.session_state.student_name
         teacher_msg = st.text_area("Your message to the teacher:")
+        
         if st.button("Send Message"):
-            st.success("Sent successfully! ✉️")
+            if teacher_msg.strip():
+                try:
+                    import smtplib
+                    from email.mime.text import MIMEText
+                    from email.mime.multipart import MIMEMultipart
+
+                    sender_email = "Nafiseh.sabouri19@gmail.com"
+                    app_password = "cfpu kvoj surx oafx"  # رمز ۱۶ رقمی جیمیل شما
+                    
+                    msg = MIMEMultipart()
+                    msg['From'] = sender_email
+                    msg['To'] = sender_email
+                    msg['Subject'] = f"New Message from Student: {student_sender} 🌸"
+                    
+                    body = f"Student Name: {student_sender}\n\nMessage:\n{teacher_msg}"
+                    msg.attach(MIMEText(body, 'plain'))
+                    
+                    server = smtplib.SMTP('smtp.gmail.com', 587)
+                    server.starttls()
+                    server.login(sender_email, app_password)
+                    server.send_message(msg)
+                    server.quit()
+                    
+                    st.success("Your message has been sent to the teacher successfully! ✉️✨")
+                except Exception as e:
+                    st.error(f"Failed to send email. Error: {e}")
+            else:
+                st.warning("Please write a message first.")
 
     elif menu_selection == "Ideas & Suggestions":
         st.title("💡 Ideas & Suggestions")
