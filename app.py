@@ -7,22 +7,25 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for colorful styling
+# Custom CSS for Soft Blue Theme Styling
 st.markdown("""
     <style>
     .main {
-        background-color: #f8f9fa;
+        background-color: #f0f4f8;
     }
     .stButton>button {
-        background-color: #4f46e5;
+        background-color: #3b82f6;
         color: white;
         border-radius: 8px;
         padding: 0.5rem 1rem;
         border: none;
     }
     .stButton>button:hover {
-        background-color: #4338ca;
+        background-color: #2563eb;
         color: white;
+    }
+    h1, h2, h3 {
+        color: #1e3a8a;
     }
     </style>
 """, unsafe_allow_html=True)
