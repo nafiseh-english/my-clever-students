@@ -32,6 +32,13 @@ st.markdown("""
     section[data-testid="stSidebar"] {
         background-color: #fce7f3;
     }
+    .mistake-box {
+        background-color: #fff1f2;
+        border-left: 4px solid #e11d48;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -55,7 +62,7 @@ TENSE_LEVELS = [
     "Future Perfect Continuous"
 ]
 
-# --- سیستم ذخیره دائمی پیشرفت دانش‌آموزان (جلوگیری از ریست شدن با رفرش) ---
+# --- سیستم ذخیره دائمی پیشرفت دانش‌آموزان ---
 PROGRESS_FILE = "student_progress.json"
 
 def load_all_progress():
@@ -77,8 +84,7 @@ def save_student_progress(student_name, unlocked_index, scores, quiz_variant):
     with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-# --- بانک جامع ۲۰ سوالی برای هر ۱۳ ساختار (۱۰ سوال Version A + ۱۰ سوال Version B) ---
-# انواع سوال: "mc" (چهارگزینه‌ای), "fill" (جای خالی), "order" (جمله‌سازی), "tf" (True/False)
+# --- بانک جامع ۲۰ سوالی جذاب (۱۰ سوال Version A + ۱۰ سوال Version B) برای هر ۱۳ زمان ---
 RAW_QUESTIONS = {
     "Simple Present": {
         "A": [
@@ -90,8 +96,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Water _____ (boil) at 100 degrees Celsius.", "ans": "boils"},
             {"type": "order", "q": "7. Make a correct sentence: `always / early / wakes up / Bahar`", "ans": "bahar always wakes up early"},
             {"type": "order", "q": "8. Make a correct sentence: `coffee / drink / you / do / ?`", "ans": "do you drink coffee"},
-            {"type": "tf", "q": "9. True or False: 'She don't like spicy food.' is grammatically correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: We add '-s' or '-es' to verbs for He/She/It in positive sentences.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Can we say 'My cat speaks English fluently every night' in real life?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Do we add '-s' to the verb for 'He/She/It' in positive Simple Present sentences?", "ans": "True"},
         ],
         "B": [
             {"type": "mc", "q": "1. The sun _____ in the east.", "opts": ["rise", "rises", "rising"], "ans": "rises"},
@@ -102,8 +108,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Cats _____ (like) milk.", "ans": "like"},
             {"type": "order", "q": "7. Make a correct sentence: `on / tennis / play / Fridays / we`", "ans": "we play tennis on fridays"},
             {"type": "order", "q": "8. Make a correct sentence: `does / live / where / Setareh / ?`", "ans": "where does setareh live"},
-            {"type": "tf", "q": "9. True or False: 'Does he plays football?' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Simple Present is used for daily habits and general truths.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Is 'He don't like vegetables' a grammatically correct sentence?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Is Simple Present used for permanent truths and routines?", "ans": "True"},
         ]
     },
     "Present Continuous": {
@@ -116,8 +122,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Reza _____ (write) an email at the moment.", "ans": "is writing"},
             {"type": "order", "q": "7. Make a correct sentence: `now / reading / a book / am / I`", "ans": "i am reading a book now"},
             {"type": "order", "q": "8. Make a correct sentence: `are / going / where / you / ?`", "ans": "where are you going"},
-            {"type": "tf", "q": "9. True or False: 'She is cook dinner now.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Present Continuous uses 'am/is/are + verb-ing'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Can we use Present Continuous for things happening right this second?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'She is swim in the pool' spelled correctly?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. Be quiet! The baby _____.", "opts": ["sleeps", "is sleeping", "slept"], "ans": "is sleeping"},
@@ -128,8 +134,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Look! The birds _____ (fly) south.", "ans": "are flying"},
             {"type": "order", "q": "7. Make a correct sentence: `playing / in the park / are / the kids`", "ans": "the kids are playing in the park"},
             {"type": "order", "q": "8. Make a correct sentence: `is / raining / it / today / ?`", "ans": "is it raining today"},
-            {"type": "tf", "q": "9. True or False: 'They are swiming in the pool.' has correct spelling.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Words like 'now' and 'at the moment' are common with Present Continuous.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Does Present Continuous require 'am/is/are' + verb-ing?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'I am know the answer' correct in Present Continuous?", "ans": "False"},
         ]
     },
     "Present Perfect": {
@@ -142,8 +148,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: She has _____ (write) three books so far.", "ans": "written"},
             {"type": "order", "q": "7. Make a correct sentence: `just / has / arrived / Mohammad`", "ans": "mohammad has just arrived"},
             {"type": "order", "q": "8. Make a correct sentence: `ever / you / been / to London / have / ?`", "ans": "have you ever been to london"},
-            {"type": "tf", "q": "9. True or False: 'She have gone to the market.' is grammatically correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Present Perfect uses 'have/has + Past Participle (V3)'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Can we use Present Perfect for past actions with a connection to now?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'She have eaten lunch' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. Mohammad _____ just arrived home.", "opts": ["have", "has", "was"], "ans": "has"},
@@ -154,8 +160,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: They _____ (not / finish) the project yet.", "ans": "haven't finished"},
             {"type": "order", "q": "7. Make a correct sentence: `already / eaten / have / lunch / we`", "ans": "we have already eaten lunch"},
             {"type": "order", "q": "8. Make a correct sentence: `has / broken / Reza / his leg`", "ans": "reza has broken his leg"},
-            {"type": "tf", "q": "9. True or False: We use 'since' with a period of time like 'since five years'.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: 'Yet' is usually used at the end of negative and question sentences.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Do we use 'since' with an exact starting point in time?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'I has finished' correct grammar?", "ans": "False"},
         ]
     },
     "Present Perfect Continuous": {
@@ -168,8 +174,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Why are your hands dirty? Have you been _____ (garden)?", "ans": "gardening"},
             {"type": "order", "q": "7. Make a correct sentence: `for / has / sleeping / hours / been / he / three`", "ans": "he has been sleeping for three hours"},
             {"type": "order", "q": "8. Make a correct sentence: `been / what / doing / have / you / ?`", "ans": "what have you been doing"},
-            {"type": "tf", "q": "9. True or False: 'She has been work here for a year.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: This tense emphasizes the duration of an ongoing action from past to now.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Does Present Perfect Continuous focus on the duration of an action?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'She has been work here' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. Sara has been _____ on this project for weeks.", "opts": ["work", "worked", "working"], "ans": "working"},
@@ -180,8 +186,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: How long has Jamil been _____ (drive)?", "ans": "driving"},
             {"type": "order", "q": "7. Make a correct sentence: `all / raining / has / been / it / day`", "ans": "it has been raining all day"},
             {"type": "order", "q": "8. Make a correct sentence: `have / studying / how long / been / you / ?`", "ans": "how long have you been studying"},
-            {"type": "tf", "q": "9. True or False: 'They have being running for an hour.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: The formula is 'have/has + been + verb-ing'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Is 'They have being waiting' correct?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Is the formula 'have/has + been + verb-ing'?", "ans": "True"},
         ]
     },
     "Simple Past": {
@@ -194,8 +200,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: I _____ (visit) my grandparents last summer.", "ans": "visited"},
             {"type": "order", "q": "7. Make a correct sentence: `yesterday / finished / homework / his / Ali`", "ans": "ali finished his homework yesterday"},
             {"type": "order", "q": "8. Make a correct sentence: `go / did / where / you / last night / ?`", "ans": "where did you go last night"},
-            {"type": "tf", "q": "9. True or False: 'Did she went to the party?' is grammatically correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: After 'didn't', we always use the base form of the verb.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Do we use Simple Past for completed actions in the past?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'Did you went there?' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. Where _____ Bahar go on vacation?", "opts": ["do", "does", "did"], "ans": "did"},
@@ -205,9 +211,9 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "5. Fill in the blank: We _____ (see) a great film last night.", "ans": "saw"},
             {"type": "fill", "q": "6. Fill in the blank: Mohammad _____ (study) hard for the test.", "ans": "studied"},
             {"type": "order", "q": "7. Make a correct sentence: `at home / was / yesterday / Darya`", "ans": "darya was at home yesterday"},
-            {"type": "order", "q": "8. Make a correct sentence: `call / you / did / why / me / ?`", "ans": "why did you call me"},
-            {"type": "tf", "q": "9. True or False: 'We was at the park.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Simple Past is used for completed actions in the past.", "ans": "True"},
+            {"type": "order", "q": "8. Make a correct sentence: `call / did / why / me / ?`", "ans": "why did you call me"},
+            {"type": "tf", "q": "9. Detective check: Is 'We was happy' correct?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Do we use base verb after 'didn't'?", "ans": "True"},
         ]
     },
     "Past Continuous": {
@@ -220,8 +226,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: It _____ (rain) heavily all evening.", "ans": "was raining"},
             {"type": "order", "q": "7. Make a correct sentence: `reading / was / a book / Jamil / at 9 PM`", "ans": "jamil was reading a book at 9 pm"},
             {"type": "order", "q": "8. Make a correct sentence: `were / laughing / why / they / ?`", "ans": "why were they laughing"},
-            {"type": "tf", "q": "9. True or False: 'They was driving too fast.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Past Continuous uses 'was/were + verb-ing'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Does Past Continuous describe an ongoing past action?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'They was running' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. While Ali _____ driving, he saw an accident.", "opts": ["was", "were", "is"], "ans": "was"},
@@ -232,8 +238,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: You _____ (sleep) at 10 AM yesterday.", "ans": "were sleeping"},
             {"type": "order", "q": "7. Make a correct sentence: `walking / in the park / were / we`", "ans": "we were walking in the park"},
             {"type": "order", "q": "8. Make a correct sentence: `was / doing / what / Bahar / ?`", "ans": "what was bahar doing"},
-            {"type": "tf", "q": "9. True or False: 'I were waiting for you.' is grammatically correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Past Continuous often describes a background action interrupted by Simple Past.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Is 'I were sleeping' correct?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Is the formula 'was/were + verb-ing'?", "ans": "True"},
         ]
     },
     "Past Perfect": {
@@ -246,8 +252,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: I realized I had _____ (lose) my wallet.", "ans": "lost"},
             {"type": "order", "q": "7. Make a correct sentence: `had / the movie / started / already`", "ans": "the movie had already started"},
             {"type": "order", "q": "8. Make a correct sentence: `before / had / met / you / him / ?`", "ans": "had you met him before"},
-            {"type": "tf", "q": "9. True or False: 'She had went home before I called.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Past Perfect shows an action completed before another past action.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Does Past Perfect happen before another past action?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'She had went home' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. By the time we got there, the show _____ started.", "opts": ["has", "had", "was"], "ans": "had"},
@@ -258,8 +264,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: When I woke up, my brother had _____ (go) to school.", "ans": "gone"},
             {"type": "order", "q": "7. Make a correct sentence: `had / cooked / dinner / Mohammad / before 8`", "ans": "mohammad had cooked dinner before 8"},
             {"type": "order", "q": "8. Make a correct sentence: `why / left / had / early / they / ?`", "ans": "why had they left early"},
-            {"type": "tf", "q": "9. True or False: Past Perfect uses 'had + Past Participle (V3)' for all subjects.", "ans": "True"},
-            {"type": "tf", "q": "10. True or False: 'They have arrived before the storm started.' is correct.", "ans": "False"},
+            {"type": "tf", "q": "9. Detective check: Do we use 'had + V3' in Past Perfect?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'They have arrived before storm' correct?", "ans": "False"},
         ]
     },
     "Past Perfect Continuous": {
@@ -272,8 +278,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: It had been _____ (snow) all night.", "ans": "snowing"},
             {"type": "order", "q": "7. Make a correct sentence: `had / crying / been / she / for hours`", "ans": "she had been crying for hours"},
             {"type": "order", "q": "8. Make a correct sentence: `been / waiting / how long / had / you / ?`", "ans": "how long had you been waiting"},
-            {"type": "tf", "q": "9. True or False: 'He had been sleep for ten hours.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: The formula is 'had + been + verb-ing'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Does this tense emphasize duration up to a point in the past?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'He had been sleep' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. The ground was wet because it had been _____.", "opts": ["rain", "rained", "raining"], "ans": "raining"},
@@ -284,8 +290,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Had they been _____ (argue) before you arrived?", "ans": "arguing"},
             {"type": "order", "q": "7. Make a correct sentence: `driving / had / been / Reza / since morning`", "ans": "reza had been driving since morning"},
             {"type": "order", "q": "8. Make a correct sentence: `had / studying / Setareh / been / English`", "ans": "setareh had been studying english"},
-            {"type": "tf", "q": "9. True or False: 'We has been waiting for an hour.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Past Perfect Continuous shows duration before a past event.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Is 'We has been waiting' correct?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Is the formula 'had + been + verb-ing'?", "ans": "True"},
         ]
     },
     "Simple Future (will)": {
@@ -298,8 +304,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: _____ (you / open) the window, please?", "ans": "Will you open"},
             {"type": "order", "q": "7. Make a correct sentence: `call / will / tonight / I / you`", "ans": "i will call you tonight"},
             {"type": "order", "q": "8. Make a correct sentence: `will / when / arrive / Sara / ?`", "ans": "when will sara arrive"},
-            {"type": "tf", "q": "9. True or False: 'She will goes to Tehran tomorrow.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: After 'will', we always use the base form of the verb.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Do we use base verb after 'will'?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'She will goes tomorrow' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. I think Jamil _____ pass the exam easily.", "opts": ["will", "is", "was"], "ans": "will"},
@@ -310,8 +316,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: They _____ (not / come) to the party tonight.", "ans": "won't come"},
             {"type": "order", "q": "7. Make a correct sentence: `will / win / our team / the match`", "ans": "our team will win the match"},
             {"type": "order", "q": "8. Make a correct sentence: `you / will / marry / me / ?`", "ans": "will you marry me"},
-            {"type": "tf", "q": "9. True or False: 'Won't' is the short form of 'will not'.", "ans": "True"},
-            {"type": "tf", "q": "10. True or False: 'He wills help us.' is grammatically correct.", "ans": "False"},
+            {"type": "tf", "q": "9. Detective check: Is 'won't' short for 'will not'?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'He wills help us' correct?", "ans": "False"},
         ]
     },
     "Future with 'be going to'": {
@@ -324,8 +330,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Are you going to _____ (visit) your aunt?", "ans": "visit"},
             {"type": "order", "q": "7. Make a correct sentence: `going to / am / study / tonight / I`", "ans": "i am going to study tonight"},
             {"type": "order", "q": "8. Make a correct sentence: `is / going to / what / Reza / cook / ?`", "ans": "what is reza going to cook"},
-            {"type": "tf", "q": "9. True or False: 'They is going to travel soon.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: We use 'be going to' for planned future actions and evidence-based predictions.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Do we use 'be going to' for planned intentions?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'They is going to travel' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. They _____ going to travel to Spain this summer.", "opts": ["am", "is", "are"], "ans": "are"},
@@ -336,8 +342,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: We _____ (not / stay) at a hotel.", "ans": "aren't going to stay"},
             {"type": "order", "q": "7. Make a correct sentence: `going to / is / rain / it`", "ans": "it is going to rain"},
             {"type": "order", "q": "8. Make a correct sentence: `are / going to / when / leave / you / ?`", "ans": "when are you going to leave"},
-            {"type": "tf", "q": "9. True or False: 'She going to call me.' is missing the verb 'is'.", "ans": "True"},
-            {"type": "tf", "q": "10. True or False: 'I am going to bought a phone.' is correct.", "ans": "False"},
+            {"type": "tf", "q": "9. Detective check: Is 'She going to call' missing the verb 'is'?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'I am going to bought a phone' correct?", "ans": "False"},
         ]
     },
     "Future Continuous": {
@@ -350,8 +356,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: They _____ (not / work) on Sunday afternoon.", "ans": "won't be working"},
             {"type": "order", "q": "7. Make a correct sentence: `will / studying / be / at 10 PM / Setareh`", "ans": "setareh will be studying at 10 pm"},
             {"type": "order", "q": "8. Make a correct sentence: `be / doing / what / will / tomorrow / you / ?`", "ans": "what will you be doing tomorrow"},
-            {"type": "tf", "q": "9. True or False: 'I will being working tomorrow.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Future Continuous uses 'will + be + verb-ing'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Does Future Continuous use 'will + be + verb-ing'?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'I will being working' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. Next week, Darya will be _____ in New York.", "opts": ["work", "worked", "working"], "ans": "working"},
@@ -362,8 +368,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: We will be _____ (wait) for you at the airport.", "ans": "waiting"},
             {"type": "order", "q": "7. Make a correct sentence: `sleeping / will / be / the baby / at midnight`", "ans": "the baby will be sleeping at midnight"},
             {"type": "order", "q": "8. Make a correct sentence: `will / attending / Jamil / be / the conference / ?`", "ans": "will jamil be attending the conference"},
-            {"type": "tf", "q": "9. True or False: 'She will be cook dinner at 7.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Future Continuous describes an action in progress at a specific future time.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Is 'She will be cook dinner' correct?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Does this tense show an action in progress at a future time?", "ans": "True"},
         ]
     },
     "Future Perfect": {
@@ -376,8 +382,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: I _____ (not / finish) reading this book by tonight.", "ans": "won't have finished"},
             {"type": "order", "q": "7. Make a correct sentence: `will / left / have / the train / by 6 PM`", "ans": "the train will have left by 6 pm"},
             {"type": "order", "q": "8. Make a correct sentence: `have / saved / how much / will / you / ?`", "ans": "how much will you have saved"},
-            {"type": "tf", "q": "9. True or False: 'She will has arrived by noon.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Future Perfect uses 'will + have + Past Participle (V3)'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Does Future Perfect use 'will + have + V3'?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'She will has arrived' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. By 2030, scientists will have _____ a cure.", "opts": ["find", "found", "finding"], "ans": "found"},
@@ -388,8 +394,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: By 10 PM, the kids will have _____ (fall) asleep.", "ans": "fallen"},
             {"type": "order", "q": "7. Make a correct sentence: `by tomorrow / repaired / will / have / Reza / the car`", "ans": "reza will have repaired the car by tomorrow"},
             {"type": "order", "q": "8. Make a correct sentence: `finished / will / you / have / by 8 / ?`", "ans": "will you have finished by 8"},
-            {"type": "tf", "q": "9. True or False: 'By' is a very common preposition used with Future Perfect.", "ans": "True"},
-            {"type": "tf", "q": "10. True or False: 'We will have went home by then.' is correct.", "ans": "False"},
+            {"type": "tf", "q": "9. Detective check: Is 'By' a common preposition with Future Perfect?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'We will have went home' correct?", "ans": "False"},
         ]
     },
     "Future Perfect Continuous": {
@@ -402,8 +408,8 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: In July, we will have been _____ (travel) for six months.", "ans": "traveling"},
             {"type": "order", "q": "7. Make a correct sentence: `will / waiting / have / been / I / for two hours`", "ans": "i will have been waiting for two hours"},
             {"type": "order", "q": "8. Make a correct sentence: `been / working / how long / will / Sara / have / ?`", "ans": "how long will sara have been working"},
-            {"type": "tf", "q": "9. True or False: 'He will has been sleeping for 8 hours.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: The formula is 'will + have + been + verb-ing'.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Is the formula 'will + have + been + verb-ing'?", "ans": "True"},
+            {"type": "tf", "q": "10. Detective check: Is 'He will has been sleeping' correct?", "ans": "False"},
         ],
         "B": [
             {"type": "mc", "q": "1. By midnight, we will have been _____ for 12 hours.", "opts": ["travel", "traveled", "traveling"], "ans": "traveling"},
@@ -414,13 +420,13 @@ RAW_QUESTIONS = {
             {"type": "fill", "q": "6. Fill in the blank: Next year, they will have been _____ (build) this bridge for 4 years.", "ans": "building"},
             {"type": "order", "q": "7. Make a correct sentence: `for / will / teaching / have / been / Setareh / ten years`", "ans": "setareh will have been teaching for ten years"},
             {"type": "order", "q": "8. Make a correct sentence: `will / been / living / where / you / have / ?`", "ans": "where will you have been living"},
-            {"type": "tf", "q": "9. True or False: 'They will have be working all day.' is correct.", "ans": "False"},
-            {"type": "tf", "q": "10. True or False: Future Perfect Continuous emphasizes the duration of an action up to a future point.", "ans": "True"},
+            {"type": "tf", "q": "9. Detective check: Is 'They will have be working' correct?", "ans": "False"},
+            {"type": "tf", "q": "10. Detective check: Does this tense emphasize continuous duration up to a future point?", "ans": "True"},
         ]
     }
 }
 
-# --- مدیریت وضعیت و پیشرفت دانش‌آموز (Session State) ---
+# --- مدیریت وضعیت و پیشرفت دانش‌آموز ---
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
@@ -437,14 +443,12 @@ if not st.session_state.logged_in:
             st.session_state.logged_in = True
             st.session_state.student_name = clean_name
             
-            # بارگذاری پیشرفت ذخیره‌شده این دانش‌آموز از فایل
             all_data = load_all_progress()
             student_data = all_data.get(clean_name, {})
             st.session_state.unlocked_index = student_data.get("unlocked_index", 0)
             st.session_state.scores = student_data.get("scores", {})
             st.session_state.quiz_variant = student_data.get("quiz_variant", {t: "A" for t in TENSE_LEVELS})
             
-            # اطمینان از اینکه همه زمان‌ها کلید A/B دارند
             for t in TENSE_LEVELS:
                 if t not in st.session_state.quiz_variant:
                     st.session_state.quiz_variant[t] = "A"
@@ -454,7 +458,6 @@ if not st.session_state.logged_in:
             st.error("Access denied! Your name is not in the authorized list.")
             
 else:
-    # همگام‌سازی مداوم با فایل ذخیره تا با رفرش یا تغییر تب داده‌ها از بین نروند
     all_data = load_all_progress()
     if st.session_state.student_name in all_data:
         saved = all_data[st.session_state.student_name]
@@ -498,40 +501,17 @@ else:
         st.write("---")
         
         col1, col2, col3 = st.columns(3)
-        
         with col1:
-            st.success("""
-            ### 🌸 Present Tenses
-            - ☀️ **Simple Present**
-            - 🏃 **Present Continuous**
-            - 🎯 **Present Perfect**
-            - ⏳ **Present Perfect Continuous**
-            """)
-            
+            st.success("### 🌸 Present Tenses\n- ☀️ **Simple Present**\n- 🏃 **Present Continuous**\n- 🎯 **Present Perfect**\n- ⏳ **Present Perfect Continuous**")
         with col2:
-            st.info("""
-            ### 🦋 Past Tenses
-            - 🕰️ **Simple Past**
-            - 🎞️ **Past Continuous**
-            - 📜 **Past Perfect**
-            - 🔄 **Past Perfect Continuous**
-            """)
-            
+            st.info("### 🦋 Past Tenses\n- 🕰️ **Simple Past**\n- 🎞️ **Past Continuous**\n- 📜 **Past Perfect**\n- 🔄 **Past Perfect Continuous**")
         with col3:
-            st.warning("""
-            ### ✨ Future Tenses
-            - 🚀 **Simple Future (will)**
-            - 📅 **Future with "be going to"**
-            - 🛸 **Future Continuous**
-            - 🏆 **Future Perfect**
-            - 🌟 **Future Perfect Continuous**
-            """)
+            st.warning("### ✨ Future Tenses\n- 🚀 **Simple Future (will)**\n- 📅 **Future with 'be going to'**\n- 🛸 **Future Continuous**\n- 🏆 **Future Perfect**\n- 🌟 **Future Perfect Continuous**")
 
     elif menu_selection == "Review":
         st.title("📚 Grammar Review & Practice")
         st.markdown("Select any of the 13 structures below to review its formula, usage, and examples:")
         
-        # پیش‌فرض روی آخرین سطح بازشده دانش‌آموز قرار می‌گیرد
         selected_tense = st.selectbox(
             "Choose a Structure to Review:",
             TENSE_LEVELS,
@@ -548,25 +528,21 @@ else:
             with col2:
                 st.info("❌ **Negative:** don't / doesn't + Base Verb")
             st.markdown("#### 📝 Examples:\n- She **wakes up** early every morning.\n- They **play** tennis on Fridays.")
-            
         elif selected_tense == "Present Continuous":
             st.subheader("🏃 Present Continuous Tense")
             st.markdown("**Usage:** Actions happening right now, at the moment of speaking.")
             st.success("✅ **Formula:** Subject + **am / is / are** + Verb-**ing**")
             st.markdown("#### 📝 Examples:\n- I **am studying** English right now.\n- Look! It **is raining** outside.")
-            
         elif selected_tense == "Present Perfect":
             st.subheader("🎯 Present Perfect Tense")
             st.markdown("**Usage:** Past actions with a result or connection to the present.")
             st.success("✅ **Formula:** Subject + **have / has** + **Past Participle (V3)**")
             st.markdown("#### 📝 Examples:\n- I **have visited** Paris twice.\n- She **has finished** her homework.")
-
         elif selected_tense == "Present Perfect Continuous":
             st.subheader("⏳ Present Perfect Continuous Tense")
             st.markdown("**Usage:** Actions that started in the past and are still continuing now.")
             st.success("✅ **Formula:** Subject + **have / has + been** + Verb-**ing**")
             st.markdown("#### 📝 Examples:\n- I **have been studying** English for two hours.\n- It **has been raining** since morning.")
-            
         elif selected_tense == "Simple Past":
             st.subheader("🕰️ Simple Past Tense")
             st.markdown("**Usage:** Completed actions at a specific time in the past.")
@@ -576,49 +552,41 @@ else:
             with col2:
                 st.info("❌ **Negative:** Subject + **didn't** + Base Verb")
             st.markdown("#### 📝 Examples:\n- We **went** to the cinema yesterday.\n- He **didn't play** football last weekend.")
-                
         elif selected_tense == "Past Continuous":
             st.subheader("🎞️ Past Continuous Tense")
             st.markdown("**Usage:** Actions that were in progress at a specific moment in the past.")
             st.success("✅ **Formula:** Subject + **was / were** + Verb-**ing**")
             st.markdown("#### 📝 Examples:\n- I **was watching** TV when you called.\n- They **were playing** football at 5 PM.")
-
         elif selected_tense == "Past Perfect":
             st.subheader("📜 Past Perfect Tense")
             st.markdown("**Usage:** An action that happened before another action in the past.")
             st.success("✅ **Formula:** Subject + **had** + **Past Participle (V3)**")
             st.markdown("#### 📝 Examples:\n- When I arrived, the train **had already left**.\n- She **had eaten** dinner before we got home.")
-
         elif selected_tense == "Past Perfect Continuous":
             st.subheader("🔄 Past Perfect Continuous Tense")
             st.markdown("**Usage:** Ongoing past action that continued up until another past moment.")
             st.success("✅ **Formula:** Subject + **had + been** + Verb-**ing**")
             st.markdown("#### 📝 Examples:\n- We **had been waiting** for an hour before the bus came.\n- She was tired because she **had been running**.")
-            
         elif selected_tense == "Simple Future (will)":
             st.subheader("🚀 Simple Future Tense (will)")
             st.markdown("**Usage:** Spontaneous decisions, promises, and general predictions.")
             st.success("✅ **Formula:** Subject + **will** + Base Verb")
             st.markdown("#### 📝 Examples:\n- I **will help** you with your homework.\n- It **will rain** tomorrow.")
-
         elif selected_tense == "Future with 'be going to'":
             st.subheader("📅 Future with 'be going to'")
             st.markdown("**Usage:** Planned future intentions and predictions based on present evidence.")
             st.success("✅ **Formula:** Subject + **am / is / are + going to** + Base Verb")
             st.markdown("#### 📝 Examples:\n- I **am going to buy** a new laptop next week.\n- Look at the clouds! It **is going to rain**.")
-
         elif selected_tense == "Future Continuous":
             st.subheader("🛸 Future Continuous Tense")
             st.markdown("**Usage:** Actions that will be in progress at a specific time in the future.")
             st.success("✅ **Formula:** Subject + **will + be** + Verb-**ing**")
             st.markdown("#### 📝 Examples:\n- This time tomorrow, I **will be relaxing** on the beach.\n- At 8 PM tonight, we **will be watching** the match.")
-
         elif selected_tense == "Future Perfect":
             st.subheader("🏆 Future Perfect Tense")
             st.markdown("**Usage:** Actions that will be completed before a specific time in the future.")
             st.success("✅ **Formula:** Subject + **will + have** + **Past Participle (V3)**")
             st.markdown("#### 📝 Examples:\n- By next year, I **will have graduated** from university.\n- She **will have finished** the report by 5 PM.")
-
         elif selected_tense == "Future Perfect Continuous":
             st.subheader("🌟 Future Perfect Continuous Tense")
             st.markdown("**Usage:** Emphasizes the duration of an action up to a certain point in the future.")
@@ -627,7 +595,7 @@ else:
 
     elif menu_selection == "Games & Quiz":
         st.title("🎮 Mastery Quests & Comprehensive Quizzes")
-        st.info("📌 **Rule:** Each quiz has **10 mixed questions** (Multiple Choice, Fill-in-the-blank, Sentence Building, and True/False). Score **75% or higher** to unlock the next level! Your progress is automatically saved.")
+        st.info("📌 **Rule:** Each quiz has **10 mixed questions**. Score **75% or higher** to unlock the next level! Detailed feedback will show your exact mistakes.")
         
         st.subheader("🗺️ Your 13-Level Learning Path")
         for row_start in range(0, len(TENSE_LEVELS), 4):
@@ -647,10 +615,9 @@ else:
         
         st.write("---")
         
-        # به طور پیش‌فرض روی جدیدترین مرحله‌ای که باز شده قرار می‌گیرد تا به عقب برنگردد
         available_tenses = TENSE_LEVELS[:st.session_state.unlocked_index + 1]
         chosen_quiz_tense = st.selectbox(
-            "Select an unlocked level (defaults to your current active level):",
+            "Select an unlocked level:",
             available_tenses,
             index=len(available_tenses) - 1
         )
@@ -675,21 +642,30 @@ else:
         
         if st.button("Submit Comprehensive Quiz 🎯"):
             correct_count = 0
+            mistakes = []
+            
             for i, item in enumerate(questions):
                 u_ans = str(user_answers[i]).strip().lower().rstrip(".?!")
                 c_ans = str(item["ans"]).strip().lower().rstrip(".?!")
                 if u_ans == c_ans:
                     correct_count += 1
+                else:
+                    mistakes.append({
+                        "question": item["q"],
+                        "your_answer": str(user_answers[i]),
+                        "correct_answer": str(item["ans"])
+                    })
                     
             percentage = int((correct_count / len(questions)) * 100)
             st.session_state.scores[chosen_quiz_tense] = percentage
             
             current_idx = TENSE_LEVELS.index(chosen_quiz_tense)
+            
+            st.write("---")
             if percentage >= 75:
                 if current_idx == st.session_state.unlocked_index and current_idx + 1 < len(TENSE_LEVELS):
                     st.session_state.unlocked_index += 1
                 
-                # ذخیره دائمی پیشرفت در فایل
                 save_student_progress(
                     st.session_state.student_name,
                     st.session_state.unlocked_index,
@@ -698,7 +674,7 @@ else:
                 )
                 
                 st.balloons()
-                st.success(f"🎉 Congratulations {st.session_state.student_name}! You scored **{percentage}%** ({correct_count}/10)!")
+                st.success(f"🎉 Great job {st.session_state.student_name}! You scored **{percentage}%** ({correct_count}/10)!")
                 
                 if st.session_state.unlocked_index > current_idx:
                     next_tense = TENSE_LEVELS[st.session_state.unlocked_index]
@@ -708,7 +684,6 @@ else:
                 elif current_idx + 1 == len(TENSE_LEVELS):
                     st.success("🏆 **GRAND MASTER!** You have completed and passed ALL 13 English grammar structures!")
             else:
-                # ذخیره نمره پایین‌تر برای ثبت سابقه
                 save_student_progress(
                     st.session_state.student_name,
                     st.session_state.unlocked_index,
@@ -716,7 +691,35 @@ else:
                     st.session_state.quiz_variant
                 )
                 st.error(f"📉 You scored **{percentage}%** ({correct_count}/10). You need at least **75%** to unlock the next level.")
-                st.warning("💡 Review the rules in the **Review** tab, then click the button below to take a **completely different set of 10 questions**!")
+
+            # --- بخش بررسی اشتباهات با گربه‌ی بانمک و مظلوم ---
+            if mistakes:
+                st.write("---")
+                col_cat, col_msg = st.columns([1, 4])
+                with col_cat:
+                    # تصویر گربه‌ی ملوس و پرسشگر
+                    st.image("https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?w=300&auto=format&fit=crop&q=80", width=120)
+                with col_msg:
+                    st.markdown("### 🐾 Kitty says:")
+                    st.markdown(f"*\"Oops, {st.session_state.student_name}! You made {len(mistake_count if 'mistake_count' else len(mistakes))} little mistake(s). Let's check them together so you can learn! Meow~ 🐱\"*")
+                
+                st.markdown("#### ❌ Mistakes Breakdown:")
+                for m in mistakes:
+                    st.markdown(f"""
+                    <div class="mistake-box">
+                        <b>Question:</b> {m['question']}<br>
+                        ❌ <b>Your Answer:</b> <span style="color: #e11d48;">{m['your_answer']}</span><br>
+                        ✅ <b>Correct Answer:</b> <span style="color: #16a34a;">{m['correct_answer']}</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.markdown("---")
+                col_cat2, col_msg2 = st.columns([1, 4])
+                with col_cat2:
+                    st.image("https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?w=300&auto=format&fit=crop&q=80", width=120)
+                with col_msg2:
+                    st.markdown("### 🐾 Purr-fect Kitty says:")
+                    st.markdown(f"*\"Meow-velous! You got every single question right without a single mistake! I'm so proud of you! ✨\"*")
                 
         if chosen_quiz_tense in st.session_state.scores and st.session_state.scores[chosen_quiz_tense] < 75:
             if st.button("🔄 Switch to New Question Set (Retake)"):
