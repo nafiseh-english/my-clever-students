@@ -34,36 +34,68 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# App Header with Emoji and Colors
-st.title("🌟 My Clever Students - Educational Portal")
-st.markdown("### Welcome to your interactive English learning hub! 🚀")
-st.write("---")
+# --- بخش مدیریت ورود (Authentication) ---
+# لیست اسامی مجاز به انگلیسی (می‌توانید اسامی دلخواه خود را اینجا اضافه کنید)
+ALLOWED_STUDENTS = ["Jamil", "Nafiseh"]
 
-# Creating Tabs for Navigation
-tab1, tab2, tab3 = st.tabs(["📚 Class Review", "📝 Homework", "📤 Submit Answer"])
+# بررسی اینکه آیا کاربر قبلاً وارد شده است یا خیر
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-with tab1:
-    st.header("Class Review")
-    st.write("Review the topics covered in our latest class sessions:")
-    st.checkbox("I have reviewed vocabulary list 1.")
-    st.checkbox("I have practiced the reading text.")
-
-with tab2:
-    st.header("Homework Assignments")
-    st.write("Complete the exercises assigned for this week:")
-    st.checkbox("I have completed exercise page 12 in the workbook.")
-    st.checkbox("I have practiced the listening file.")
-
-with tab3:
-    st.header("Submit Your Answer")
-    st.write("Write your answers or notes here to send:")
-    student_name = st.text_input("Full Name:")
-    student_answer = st.text_area("Write your answer here...")
-
-    if st.button("Submit Answer"):
-        if student_name:
-            st.success(
-                f"Thank you, {student_name}! Your answer has been successfully submitted. 🎉"
-            )
+if not st.session_state.logged_in:
+    st.title("🔒 Student Login Portal")
+    st.markdown("Please enter your name in English to access the portal:")
+    
+    # کادر ورود نام
+    entered_name = st.text_input("Your Name (e.g., Sara):")
+    
+    if st.button("Login"):
+        # بررسی اینکه آیا نام وارد شده در لیست مجاز هست یا خیر (حساسیت به بزرگ و کوچک بودن حروف را با .title() کنترل می‌کنیم)
+        if entered_name.strip().title() in ALLOWED_STUDENTS:
+            st.session_state.logged_in = True
+            st.session_state.student_name = entered_name.strip().title()
+            st.rerun()
         else:
-            st.warning("Please enter your name first.")
+            st.error("Access denied! Your name is not in the authorized list.")
+            
+else:
+    # --- محتوای اصلی سایت (فقط بعد از ورود موفق نمایش داده می‌شود) ---
+    st.title(f"🌟 Welcome, {st.session_state.student_name}! - Educational Portal")
+    st.markdown("### Welcome to your interactive English learning hub! 🚀")
+    st.write("---")
+
+    # Creating Tabs for Navigation
+    tab1, tab2, tab3 = st.tabs(["📚 Class Review", "📝 Homework", "📤 Submit Answer"])
+
+    with tab1:
+        st.header("Class Review")
+        st.write("Review the topics covered in our latest class sessions:")
+        st.checkbox("I have reviewed vocabulary list 1.")
+        st.checkbox("I have practiced the reading text.")
+
+    with tab2:
+        st.header("Homework Assignments")
+        st.write("Complete the exercises assigned for this week:")
+        st.checkbox("I have completed exercise page 12 in the workbook.")
+        st.checkbox("I have practiced the listening file.")
+
+    with tab3:
+        st.header("Submit Your Answer")
+        st.write("Write your answers or notes here to send:")
+        # نام دانش‌آموز به صورت خودکار از زمان ورود ذخیره شده است
+        st.info(f"Submitting as: **{st.session_state.student_name}**")
+        student_answer = st.text_area("Write your answer here...")
+
+        if st.button("Submit Answer"):
+            if student_answer:
+                st.success(
+                    f"Thank you, {st.session_state.student_name}! Your answer has been successfully submitted. 🎉"
+                )
+            else:
+                st.warning("Please write your answer first.")
+                
+    # دکمه خروج (برای تست یا تغییر کاربر)
+    st.write("---")
+    if st.button("Logout"):
+        st.session_state.logged_in = False
+        st.rerun()
