@@ -102,7 +102,6 @@ else:
         st.markdown("#### 🎯 Practice Time: Write your own sentence!")
         st.write("Write a sentence about your daily routine using Simple Present (e.g., *I wake up early.* or *She goes to school.*):")
         
-        # کادر متنی برای نوشتن جمله توسط دانش‌آموز
         student_sentence = st.text_input("Type your sentence here:")
         
         if st.button("Check My Sentence ✍️"):
@@ -111,7 +110,6 @@ else:
             else:
                 cleaned_sentence = student_sentence.strip().lower()
                 
-                # بررسی ساده برای خطاهای رایج (مثل She go یا He play)
                 if "she go " in cleaned_sentence or "he go " in cleaned_sentence or "it go " in cleaned_sentence:
                     st.error("❌ Not quite right! For He/She/It, 'go' must change to **goes**. (e.g., *She goes to school.*)")
                 elif ("she " in cleaned_sentence or "he " in cleaned_sentence or "it " in cleaned_sentence) and not any(verb in cleaned_sentence for verb in ["s ", "es ", "ies"]):
@@ -178,7 +176,7 @@ else:
         col1.metric(label="Completed Lessons", value="1")
         col2.metric(label="Quizzes Passed", value="1")
 
-    elif menu_selection, menu_selection == "Contact Teacher": # type: ignore
+    elif menu_selection == "Contact Teacher":
         st.title("👩‍🏫 Contact Teacher")
         st.write("Have a question about Simple Present? Send a direct message:")
         teacher_msg = st.text_area("Your message to the teacher:")
