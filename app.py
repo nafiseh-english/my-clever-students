@@ -83,40 +83,39 @@ else:
 
     # --- محتوای صفحات ---
     if menu_selection == "Class Topics":
-        st.title("🌟 Lesson 1: Simple Present Tense")
-        st.markdown("### Talking about Daily Routines & Habits ⏰")
-        
-        st.info("""
-        **When do we use Simple Present?**
-        - For daily routines (e.g., *I wake up at 7 AM.*)
-        - For general facts (e.g., *The sun rises in the east.*)
-        """)
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            st.success("✅ **I / You / We / They + Verb**\n- I **play** football.\n- They **study** English.")
-        with col2:
-            st.warning("⭐ **He / She / It + Verb + s/es**\n- She **plays** football.\n- He **watches** TV.")
-            
+        st.title("📚 Course Syllabus & English Tenses")
+        st.markdown("Here are the main grammar topics we will cover in our classes:")
         st.write("---")
-        st.markdown("#### 🎯 Practice Time: Write your own sentence!")
-        st.write("Write a sentence about your daily routine using Simple Present (e.g., *I wake up early.* or *She goes to school.*):")
         
-        student_sentence = st.text_input("Type your sentence here:")
+        col1, col2, col3 = st.columns(3)
         
-        if st.button("Check My Sentence ✍️"):
-            if student_sentence.strip() == "":
-                st.warning("Please type a sentence first!")
-            else:
-                cleaned_sentence = student_sentence.strip().lower()
-                
-                if "she go " in cleaned_sentence or "he go " in cleaned_sentence or "it go " in cleaned_sentence:
-                    st.error("❌ Not quite right! For He/She/It, 'go' must change to **goes**. (e.g., *She goes to school.*)")
-                elif ("she " in cleaned_sentence or "he " in cleaned_sentence or "it " in cleaned_sentence) and not any(verb in cleaned_sentence for verb in ["s ", "es ", "ies"]):
-                    st.error("❌ Careful! Remember to add **'s' or 'es'** to the verb for He/She/It (Third-person singular).")
-                else:
-                    st.balloons()
-                    st.success("😁 Brilliant! High five! 🥳 Your sentence is grammatically correct. Great job!")
+        with col1:
+            st.success("""
+            ### 🌸 Present Tenses
+            - ☀️ **Simple Present**
+            - 🏃 **Present Continuous**
+            - 🎯 **Present Perfect**
+            - ⏳ **Present Perfect Continuous**
+            """)
+            
+        with col2:
+            st.info("""
+            ### 🦋 Past Tenses
+            - 🕰️ **Simple Past**
+            - 🎞️ **Past Continuous**
+            - 📜 **Past Perfect**
+            - 🔄 **Past Perfect Continuous**
+            """)
+            
+        with col3:
+            st.warning("""
+            ### ✨ Future Tenses
+            - 🚀 **Simple Future (will)**
+            - 📅 **Future with "be going to"**
+            - 🛸 **Future Continuous**
+            - 🏆 **Future Perfect**
+            - 🌟 **Future Perfect Continuous**
+            """)
 
     elif menu_selection == "Review":
         st.title("📚 Quick Review: Simple Present")
@@ -156,7 +155,7 @@ else:
             elif score == 2:
                 st.info(f"👍 Good job! You got 2/3. Review the 'He/She/It' rule once more!")
             else:
-                st.error(f"💪 You got {score}/3. Don't worry, check the Class Topics tab and try again!")
+                st.error(f"💪 You got {score}/3. Don't worry, check the Review tab and try again!")
 
     elif menu_selection == "Grades per Lesson":
         st.title("📊 Grades per Lesson")
@@ -178,7 +177,7 @@ else:
 
     elif menu_selection == "Contact Teacher":
         st.title("👩‍🏫 Contact Teacher")
-        st.write("Have a question about Simple Present? Send a direct message:")
+        st.write("Have a question about the topics? Send a direct message:")
         teacher_msg = st.text_area("Your message to the teacher:")
         if st.button("Send Message"):
             if teacher_msg:
