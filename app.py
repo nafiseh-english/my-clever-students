@@ -99,33 +99,26 @@ else:
             st.warning("⭐ **He / She / It + Verb + s/es**\n- She **plays** football.\n- He **watches** TV.")
             
         st.write("---")
-        st.markdown("#### 🎯 Your Self-Check (Did you learn it?):")
+        st.markdown("#### 🎯 Practice Time: Write your own sentence!")
+        st.write("Write a sentence about your daily routine using Simple Present (e.g., *I wake up early.* or *She goes to school.*):")
         
-        # سوال اول با فیدبک تعاملی
-        check1 = st.radio(
-            "Did you fully understand when to add 's' or 'es' for He/She/It?", 
-            ["Select an option...", "Yes", "No"],
-            key="check1"
-        )
+        # کادر متنی برای نوشتن جمله توسط دانش‌آموز
+        student_sentence = st.text_input("Type your sentence here:")
         
-        if check1 == "Yes":
-            st.success("😁 Brilliant! High five! 🥳 You've mastered this rule.")
-        elif check1 == "No":
-            st.warning("🔍 No worries at all! Let's take a closer look: remember we add 's' or 'es' only for third-person singular (He, She, It) in positive sentences. You can review the boxes above!")
-
-        st.write("")
-        
-        # سوال دوم با فیدبک تعاملی
-        check2 = st.radio(
-            "Did you write 3 sentences about your daily routine?", 
-            ["Select an option...", "Yes", "No"],
-            key="check2"
-        )
-        
-        if check2 == "Yes":
-            st.success("🌟 Awesome! You are super active and doing a great job! 🎉")
-        elif check2 == "No":
-            st.warning("💪 Let's try writing just one sentence about what you do every morning (e.g., *I wake up at 8 o'clock.*). You can do it!")
+        if st.button("Check My Sentence ✍️"):
+            if student_sentence.strip() == "":
+                st.warning("Please type a sentence first!")
+            else:
+                cleaned_sentence = student_sentence.strip().lower()
+                
+                # بررسی ساده برای خطاهای رایج (مثل She go یا He play)
+                if "she go " in cleaned_sentence or "he go " in cleaned_sentence or "it go " in cleaned_sentence:
+                    st.error("❌ Not quite right! For He/She/It, 'go' must change to **goes**. (e.g., *She goes to school.*)")
+                elif ("she " in cleaned_sentence or "he " in cleaned_sentence or "it " in cleaned_sentence) and not any(verb in cleaned_sentence for verb in ["s ", "es ", "ies"]):
+                    st.error("❌ Careful! Remember to add **'s' or 'es'** to the verb for He/She/It (Third-person singular).")
+                else:
+                    st.balloons()
+                    st.success("😁 Brilliant! High five! 🥳 Your sentence is grammatically correct. Great job!")
 
     elif menu_selection == "Review":
         st.title("📚 Quick Review: Simple Present")
@@ -185,7 +178,7 @@ else:
         col1.metric(label="Completed Lessons", value="1")
         col2.metric(label="Quizzes Passed", value="1")
 
-    elif menu_selection == "Contact Teacher":
+    elif menu_selection, menu_selection == "Contact Teacher": # type: ignore
         st.title("👩‍🏫 Contact Teacher")
         st.write("Have a question about Simple Present? Send a direct message:")
         teacher_msg = st.text_area("Your message to the teacher:")
