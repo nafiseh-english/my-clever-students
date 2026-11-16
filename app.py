@@ -28,41 +28,35 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # App Header with Emoji and Colors
-st.title("🌟 Student Homework & Feedback Portal")
-st.markdown("### Welcome to your interactive English learning & assignment hub! 🚀")
+st.title("🌟 My Clever Students - Educational Portal")
+st.markdown("### Welcome to your interactive English learning hub! 🚀")
 st.write("---")
 
-# Sidebar with colorful styling
-st.sidebar.header("📌 Navigation")
-menu = st.sidebar.selectbox(
-    "Choose a section:",
-    ["🏠 Home", "📤 Submit Homework", "💬 View Feedback"]
-)
+# Creating Tabs for Navigation
+tab1, tab2, tab3 = st.tabs(["📚 Class Review", "📝 Homework", "📤 Submit Answer"])
 
-if menu == "🏠 Home":
-    st.info("👋 **Welcome Dear Student / Teacher!** Use the sidebar to navigate through the platform.")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.success("✨ **For Students:** Submit your writing and audio assignments easily.")
-    with col2:
-        st.warning("👩‍🏫 **For Teachers:** Review homework and provide helpful feedback.")
+with tab1:
+    st.header("Class Review")
+    st.write("Review the topics covered in our latest class sessions:")
+    st.checkbox("I have reviewed vocabulary list 1.")
+    st.checkbox("I have practiced the reading text.")
 
-elif menu == "📤 Submit Homework":
-    st.subheader("📤 Submit Your Homework")
-    st.write("Here you can upload your English assignments.")
-    
-    student_name = st.text_input("Your Name:")
-    homework_title = st.selectbox("Select Homework:", ["Assignment 1: Essay Writing", "Assignment 2: Speaking Practice", "Assignment 3: Vocabulary"])
-    uploaded_file = st.file_uploader("Upload your file (Text, PDF, Audio):", type=["txt", "pdf", "mp3", "wav"])
-    
-    if st.button("Submit Assignment"):
+with tab2:
+    st.header("Homework Assignments")
+    st.write("Complete the exercises assigned for this week:")
+    st.checkbox("I have completed exercise page 12 in the workbook.")
+    st.checkbox("I have practiced the listening file.")
+
+with tab3:
+    st.header("Submit Your Answer")
+    st.write("Write your answers or notes here to send:")
+    student_name = st.text_input("Full Name:")
+    student_answer = st.text_area("Write your answer here...")
+
+    if st.button("Submit Answer"):
         if student_name:
-            st.success(f"🎉 Great job {student_name}! Your homework has been submitted successfully.")
+            st.success(
+                f"Thank you, {student_name}! Your answer has been successfully submitted. 🎉"
+            )
         else:
-            st.error("⚠️ Please enter your name before submitting.")
-
-elif menu == "💬 View Feedback":
-    st.subheader("💬 Teacher's Feedback")
-    st.write("Check your scores and feedback from your teacher here.")
-    st.info("No feedback available yet. Submit an assignment first!")
+            st.warning("Please enter your name first.")
