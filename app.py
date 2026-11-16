@@ -34,7 +34,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- بخش مدیریت ورود (Authentication) ---
-ALLOWED_STUDENTS = ["Nafiseh", "Jamil"]
+ALLOWED_STUDENTS = ["Nafiseh","Jamil","Bahar","Reza","Ali"]
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
@@ -54,7 +54,7 @@ if not st.session_state.logged_in:
             st.error("Access denied! Your name is not in the authorized list.")
             
 else:
-    # --- منوی کناری (Sidebar) مطابق طرح شما ---
+    # --- منوی کناری (Sidebar) ---
     with st.sidebar:
         st.image("https://img.icons8.com/color/96/student-male.png", width=80)
         st.markdown(f"### Hi, {st.session_state.student_name}! 🌸")
@@ -81,51 +81,89 @@ else:
             st.session_state.logged_in = False
             st.rerun()
 
-    # --- محتوای اصلی صفحات بر اساس انتخاب منوی کناری ---
+    # --- محتوای صفحات ---
     if menu_selection == "Class Topics":
-        st.title("🌟 Class Topics")
-        st.markdown("Here you can find all the main topics covered in our English classes.")
-        st.info("📌 Current Topic: Unit 3 - Adventures and Exploration")
-        st.checkbox("Completed reading part")
-        st.checkbox("Watched the session video")
+        st.title("🌟 Lesson 1: Simple Present Tense")
+        st.markdown("### Talking about Daily Routines & Habits ⏰")
+        
+        st.info("""
+        **When do we use Simple Present?**
+        - For daily routines (e.g., *I wake up at 7 AM.*)
+        - For general facts (e.g., *The sun rises in the east.*)
+        """)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.success("✅ **I / You / We / They + Verb**\n- I **play** football.\n- They **study** English.")
+        with col2:
+            st.warning("⭐ **He / She / It + Verb + s/es**\n- She **plays** football.\n- He **watches** TV.")
+            
+        st.write("---")
+        st.markdown("#### 🎯 Your Study Checklist:")
+        st.checkbox("I understood when to add 's' or 'es'.")
+        st.checkbox("I wrote 3 sentences about my daily routine.")
 
     elif menu_selection == "Review":
-        st.title("📚 Class Review & Summary")
-        st.write("Review the key vocabulary and grammar from our latest session:")
-        st.success("💡 **Key Vocabulary:** Adventure, Curious, Explore, Brilliant")
-        st.info("📌 **Grammar Point:** Past Simple Tense")
+        st.title("📚 Quick Review: Simple Present")
+        st.write("Review the key vocabulary and frequency adverbs from our lesson:")
+        
+        st.markdown("""
+        | Vocabulary (Daily Routines) | Example Sentence |
+        | :--- | :--- |
+        | **Wake up** | Sara **wakes up** early every day. |
+        | **Brush teeth** | Ali **brushes** his teeth twice a day. |
+        | **Go to school** | We **go** to school by bus. |
+        | **Do homework** | Setareh **does** her homework in the afternoon. |
+        """)
+        
+        st.info("💡 **Frequency Adverbs:** Always (100%) > Usually (80%) > Sometimes (50%) > Never (0%)")
 
     elif menu_selection == "Games & Quiz":
-        st.title("🎯 Games & Mini Quiz")
-        st.write("Test your knowledge and practice English with fun quizzes:")
-        q1 = st.radio("What is the past form of 'Go'?", ["Goed", "Went", "Gone", "Going"])
-        if st.button("Submit Quiz"):
-            if q1 == "Went":
-                st.success("🌟 Excellent! Correct answer.")
+        st.title("🎯 Simple Present Challenge!")
+        st.write("Answer these 3 questions to test your grammar skills:")
+        
+        q1 = st.radio("1. Sara _____ English every day.", ["study", "studies", "studying"])
+        q2 = st.radio("2. Ali and Mohammad _____ football on Fridays.", ["plays", "play", "playing"])
+        q3 = st.radio("3. _____ she like ice cream?", ["Do", "Does", "Is"])
+        
+        if st.button("Check My Score 🏆"):
+            score = 0
+            if q1 == "studies":
+                score += 1
+            if q2 == "play":
+                score += 1
+            if q3 == "Does":
+                score += 1
+                
+            if score == 3:
+                st.balloons()
+                st.success(f"🎉 Amazing job, {st.session_state.student_name}! You got 3/3!")
+            elif score == 2:
+                st.info(f"👍 Good job! You got 2/3. Review the 'He/She/It' rule once more!")
             else:
-                st.error("❌ Incorrect. Try again!")
+                st.error(f"💪 You got {score}/3. Don't worry, check the Class Topics tab and try again!")
 
     elif menu_selection == "Grades per Lesson":
         st.title("📊 Grades per Lesson")
         st.write("Check your scores and feedback for each completed lesson:")
-        st.markdown("- Lesson 1: ⭐⭐⭐⭐⭐ (5/5)")
-        st.markdown("- Lesson 2: ⭐⭐⭐⭐☆ (4/5)")
+        st.markdown("- **Lesson 1 (Simple Present):** ⭐⭐⭐⭐⭐ (5/5)")
 
     elif menu_selection == "Activity Level":
         st.title("📈 Activity Level")
         st.write("Your current participation and activity status:")
-        st.progress(75)
-        st.write("You are doing great! 75% of weekly goals completed.")
+        st.progress(80)
+        st.write("You are doing great! 80% of this week's Simple Present tasks completed.")
 
     elif menu_selection == "Total Activities":
         st.title("🏆 Total Activities")
         st.write("Summary of all tasks and homework you have completed so far:")
-        st.metric(label="Completed Assignments", value="12")
-        st.metric(label="Quizzes Passed", value="4")
+        col1, col2 = st.columns(2)
+        col1.metric(label="Completed Lessons", value="1")
+        col2.metric(label="Quizzes Passed", value="1")
 
     elif menu_selection == "Contact Teacher":
         st.title("👩‍🏫 Contact Teacher")
-        st.write("Have a question? Send a direct message to your teacher:")
+        st.write("Have a question about Simple Present? Send a direct message:")
         teacher_msg = st.text_area("Your message to the teacher:")
         if st.button("Send Message"):
             if teacher_msg:
@@ -135,7 +173,7 @@ else:
 
     elif menu_selection == "Ideas & Suggestions":
         st.title("💡 Ideas & Suggestions")
-        st.write("We would love to hear your ideas for improving the class or portal:")
+        st.write("What topic or game should we add next?")
         idea_msg = st.text_area("Write your suggestion here...")
         if st.button("Submit Idea"):
             if idea_msg:
