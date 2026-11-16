@@ -4,10 +4,10 @@ import streamlit as st
 st.set_page_config(
     page_title="My Clever Students",
     page_icon="🎓",
-    layout="centered"
+    layout="wide"
 )
 
-# Custom CSS for Soft Pink Theme Styling
+# Custom CSS for Soft Pink Theme Styling & Sidebar
 st.markdown("""
     <style>
     .stApp {
@@ -27,15 +27,14 @@ st.markdown("""
     h1, h2, h3 {
         color: #9d174d;
     }
-    /* Style for active tab */
-    [data-baseweb="tab-highlight"] {
-        background-color: #db2777 !important;
+    section[data-testid="stSidebar"] {
+        background-color: #fce7f3;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # --- بخش مدیریت ورود (Authentication) ---
-ALLOWED_STUDENTS = ["Jamil", "Nafiseh"]
+ALLOWED_STUDENTS = ["Sara", "Ali", "Mohammad", "Setareh"]
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
@@ -55,70 +54,91 @@ if not st.session_state.logged_in:
             st.error("Access denied! Your name is not in the authorized list.")
             
 else:
-    # --- محتوای اصلی سایت ---
-    st.title(f"🌟 Welcome, {st.session_state.student_name}! - Educational Portal")
-    st.markdown("### Welcome to your interactive English learning hub! 🚀")
-    st.write("---")
+    # --- منوی کناری (Sidebar) مطابق طرح شما ---
+    with st.sidebar:
+        st.image("https://img.icons8.com/color/96/student-male.png", width=80)
+        st.markdown(f"### Hi, {st.session_state.student_name}! 🌸")
+        st.write("---")
+        
+        st.markdown("### 📚 Learning Hub")
+        menu_selection = st.radio(
+            "Navigation",
+            [
+                "Class Topics", 
+                "Review", 
+                "Games & Quiz", 
+                "Grades per Lesson", 
+                "Activity Level", 
+                "Total Activities",
+                "Contact Teacher",
+                "Ideas & Suggestions"
+            ],
+            label_visibility="collapsed"
+        )
+        
+        st.write("---")
+        if st.button("Logout"):
+            st.session_state.logged_in = False
+            st.rerun()
 
-    # Creating Tabs for Navigation (اضافه شدن تب آزمون Quiz)
-    tab1, tab2, tab3, tab4 = st.tabs(["📚 Class Review", "📝 Homework & Upload", "📤 Submit Answer", "🎯 Mini Quiz"])
+    # --- محتوای اصلی صفحات بر اساس انتخاب منوی کناری ---
+    if menu_selection == "Class Topics":
+        st.title("🌟 Class Topics")
+        st.markdown("Here you can find all the main topics covered in our English classes.")
+        st.info("📌 Current Topic: Unit 3 - Adventures and Exploration")
+        st.checkbox("Completed reading part")
+        st.checkbox("Watched the session video")
 
-    # --- تب اول: خلاصه جلسه پیش (Class Review) ---
-    with tab1:
-        st.header("Class Review & Summary")
-        st.write("Review the topics, vocabulary, and grammar covered in our latest session:")
-        
-        st.info("💡 **Key Vocabulary of the Week:**\n- Adventure, Curious, Explore, Brilliant")
-        st.success("📌 **Grammar Point:** Past Simple Tense (Regular & Irregular verbs)")
-        
-        st.markdown("---")
-        st.write("Check your review progress:")
-        st.checkbox("I have reviewed the vocabulary list.")
-        st.checkbox("I have studied the grammar notes.")
+    elif menu_selection == "Review":
+        st.title("📚 Class Review & Summary")
+        st.write("Review the key vocabulary and grammar from our latest session:")
+        st.success("💡 **Key Vocabulary:** Adventure, Curious, Explore, Brilliant")
+        st.info("📌 **Grammar Point:** Past Simple Tense")
 
-    # --- تب دوم: تکالیف و بارگذاری فایل (Homework & Upload) ---
-    with tab2:
-        st.header("Homework Assignments & File Upload")
-        st.write("Download or view this week's assignments, and upload your completed files (PDF, Images, etc.):")
-        
-        st.markdown("📄 **Assignment Task:** Write a short paragraph about your last weekend using past tense.")
-        
-        # امکان بارگذاری فایل توسط دانش‌آموز
-        uploaded_file = st.file_uploader("Upload your homework file (PDF, Word, Image):", type=["pdf", "png", "jpg", "docx"])
-        
-        if uploaded_file is not None:
-            st.success(f"File '{uploaded_file.name}' successfully uploaded! Great job, {st.session_state.student_name}. 🎉")
-
-    # --- تب سوم: ارسال پاسخ متنی (Submit Answer) ---
-    with tab3:
-        st.header("Submit Your Answer")
-        st.write("Write your answers or notes here to send:")
-        st.info(f"Submitting as: **{st.session_state.student_name}**")
-        student_answer = st.text_area("Write your answer here...")
-
-        if st.button("Submit Answer Text"):
-            if student_answer:
-                st.success(
-                    f"Thank you, {st.session_state.student_name}! Your answer has been successfully submitted. 🎉"
-                )
-            else:
-                st.warning("Please write your answer first.")
-
-    # --- تب چهارم: آزمون کوچک (Mini Quiz) ---
-    with tab4:
-        st.header("Class Mini Quiz")
-        st.write("Test your knowledge based on today's lesson:")
-        
-        q1 = st.radio("1. What is the past form of the verb 'Go'?", ["Goed", "Went", "Gone", "Going"])
-        
+    elif menu_selection == "Games & Quiz":
+        st.title("🎯 Games & Mini Quiz")
+        st.write("Test your knowledge and practice English with fun quizzes:")
+        q1 = st.radio("What is the past form of 'Go'?", ["Goed", "Went", "Gone", "Going"])
         if st.button("Submit Quiz"):
             if q1 == "Went":
-                st.success("🌟 Excellent! Your answer is correct (Went).")
+                st.success("🌟 Excellent! Correct answer.")
             else:
-                st.error("❌ Incorrect. Try again! (Hint: It's an irregular verb).")
-                
-    # دکمه خروج
-    st.write("---")
-    if st.button("Logout"):
-        st.session_state.logged_in = False
-        st.rerun()
+                st.error("❌ Incorrect. Try again!")
+
+    elif menu_selection == "Grades per Lesson":
+        st.title("📊 Grades per Lesson")
+        st.write("Check your scores and feedback for each completed lesson:")
+        st.markdown("- Lesson 1: ⭐⭐⭐⭐⭐ (5/5)")
+        st.markdown("- Lesson 2: ⭐⭐⭐⭐☆ (4/5)")
+
+    elif menu_selection == "Activity Level":
+        st.title("📈 Activity Level")
+        st.write("Your current participation and activity status:")
+        st.progress(75)
+        st.write("You are doing great! 75% of weekly goals completed.")
+
+    elif menu_selection == "Total Activities":
+        st.title("🏆 Total Activities")
+        st.write("Summary of all tasks and homework you have completed so far:")
+        st.metric(label="Completed Assignments", value="12")
+        st.metric(label="Quizzes Passed", value="4")
+
+    elif menu_selection == "Contact Teacher":
+        st.title("👩‍🏫 Contact Teacher")
+        st.write("Have a question? Send a direct message to your teacher:")
+        teacher_msg = st.text_area("Your message to the teacher:")
+        if st.button("Send Message"):
+            if teacher_msg:
+                st.success("Your message has been sent to the teacher successfully! ✉️")
+            else:
+                st.warning("Please write a message first.")
+
+    elif menu_selection == "Ideas & Suggestions":
+        st.title("💡 Ideas & Suggestions")
+        st.write("We would love to hear your ideas for improving the class or portal:")
+        idea_msg = st.text_area("Write your suggestion here...")
+        if st.button("Submit Idea"):
+            if idea_msg:
+                st.success("Thank you! Your suggestion was sent. 🚀")
+            else:
+                st.warning("Please write your idea first.")
