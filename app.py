@@ -118,19 +118,86 @@ else:
             """)
 
     elif menu_selection == "Review":
-        st.title("📚 Quick Review: Simple Present")
-        st.write("Review the key vocabulary and frequency adverbs from our lesson:")
+        st.title("📚 Grammar Review & Practice")
+        st.markdown("Select a tense from below to review its structure, rules, and examples:")
         
-        st.markdown("""
-        | Vocabulary (Daily Routines) | Example Sentence |
-        | :--- | :--- |
-        | **Wake up** | Sara **wakes up** early every day. |
-        | **Brush teeth** | Ali **brushes** his teeth twice a day. |
-        | **Go to school** | We **go** to school by bus. |
-        | **Do homework** | Setareh **does** her homework in the afternoon. |
-        """)
+        selected_tense = st.selectbox(
+            "Choose a Tense to Review:",
+            [
+                "Simple Present", 
+                "Present Continuous", 
+                "Present Perfect", 
+                "Simple Past", 
+                "Past Continuous", 
+                "Simple Future (will)"
+            ]
+        )
         
-        st.info("💡 **Frequency Adverbs:** Always (100%) > Usually (80%) > Sometimes (50%) > Never (0%)")
+        st.write("---")
+        
+        if selected_tense == "Simple Present":
+            st.subheader("☀️ Simple Present Tense")
+            st.markdown("**Usage:** Used for habits, daily routines, and general facts.")
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                st.success("✅ **Positive Form**\n- I / You / We / They + Verb\n- He / She / It + Verb + **s/es**")
+            with col2:
+                st.info("❌ **Negative Form**\n- I / You / We / They + **don't** + Verb\n- He / She / It + **doesn't** + Verb")
+                
+            st.markdown("#### 📝 Examples:")
+            st.markdown("- She **wakes up** early every morning.")
+            st.markdown("- They **play** tennis on Fridays.")
+            
+        elif selected_tense == "Present Continuous":
+            st.subheader("🏃 Present Continuous Tense")
+            st.markdown("**Usage:** Used for actions happening right now, at the moment of speaking.")
+            
+            st.success("✅ **Formula:** Subject + **am / is / are** + Verb-**ing**")
+            
+            st.markdown("#### 📝 Examples:")
+            st.markdown("- I **am studying** English right now.")
+            st.markdown("- Look! It **is raining** outside.")
+            
+        elif selected_tense == "Present Perfect":
+            st.subheader("🎯 Present Perfect Tense")
+            st.markdown("**Usage:** Used for actions that happened in the past but have a connection to the present.")
+            
+            st.success("✅ **Formula:** Subject + **have / has** + **Past Participle (V3)**")
+            
+            st.markdown("#### 📝 Examples:")
+            st.markdown("- I **have visited** a lot of countries.")
+            st.markdown("- She **has finished** her homework.")
+            
+        elif selected_tense == "Simple Past":
+            st.subheader("🕰️ Simple Past Tense")
+            st.markdown("**Usage:** Used for completed actions in the past at a specific time.")
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                st.success("✅ **Positive:** Subject + **Past Verb (V2)**\n- *I went to the park yesterday.*")
+            with col2:
+                st.info("❌ **Negative:** Subject + **didn't** + Base Verb\n- *I didn't go to the park.*")
+                
+        elif selected_tense == "Past Continuous":
+            st.subheader("🎞️ Past Continuous Tense")
+            st.markdown("**Usage:** Used for actions that were ongoing at a specific moment in the past.")
+            
+            st.success("✅ **Formula:** Subject + **was / were** + Verb-**ing**")
+            
+            st.markdown("#### 📝 Examples:")
+            st.markdown("- I **was watching** TV when you called.")
+            st.markdown("- They **were playing** football at 5 PM yesterday.")
+            
+        elif selected_tense == "Simple Future (will)":
+            st.subheader("🚀 Simple Future Tense (will)")
+            st.markdown("**Usage:** Used for spontaneous decisions, predictions, or promises about the future.")
+            
+            st.success("✅ **Formula:** Subject + **will** + Base Verb")
+            
+            st.markdown("#### 📝 Examples:")
+            st.markdown("- I **will help** you with your homework.")
+            st.markdown("- It **will rain** tomorrow.")
 
     elif menu_selection == "Games & Quiz":
         st.title("🎯 Simple Present Challenge!")
