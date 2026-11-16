@@ -1,15 +1,20 @@
 import streamlit as st
 import json
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import datetime
+import pytz
 
-# Page Configuration
+# تنظیمات اولیه صفحه
 st.set_page_config(
     page_title="My Clever Students",
     page_icon="🎓",
     layout="wide"
 )
 
-# Custom CSS for Soft Pink Theme Styling & Sidebar
+# استایل اختصاصی تم صورتی ملایم و باکس‌های فیدبک
 st.markdown("""
     <style>
     .stApp {
@@ -39,13 +44,76 @@ st.markdown("""
         border-radius: 8px;
         margin-bottom: 15px;
     }
+    .sleep-box {
+        background-color: #ffffff;
+        border: 3px dashed #db2777;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(219, 39, 119, 0.1);
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- لیست کامل زبان‌آموزان مجاز ---
+# --- تنظیمات ارسال ایمیل ---
+SENDER_EMAIL = "Nafiseh.sabouri19@gmail.com"
+APP_PASSWORD = "cfpu kvoj surx oafx"
+
+def send_email_notification(subject, body):
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = SENDER_EMAIL
+        msg['To'] = SENDER_EMAIL
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+        
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(SENDER_EMAIL, APP_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception:
+        return False
+
+# --- بررسی ساعت به وقت ایران (تهران) ---
+tehran_tz = pytz.timezone('Asia/Tehran')
+now_tehran = datetime.now(tehran_tz)
+current_hour = now_tehran.hour
+current_time_str = now_tehran.strftime("%H:%M")
+
+# بازه مجاز دسترسی: از ساعت 12 ظهر (12) تا 10 شب (22)
+IS_OPEN = (12 <= current_hour < 22)
+
+# --- نمایش صفحه تعطیلی سایت خارج از ساعت مجاز ---
+if not IS_OPEN:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown('<div class="sleep-box">', unsafe_allow_html=True)
+        if os.path.exists("sleeping_cat.png"):
+            st.image("sleeping_cat.png", width=220)
+        else:
+            st.image("https://images.unsplash.com/photo-1511044568932-338cba0ad803?w=400&auto=format&fit=crop&q=80", width=220)
+        
+        st.markdown("# 🛑 Oops! Shhh... Kitty is sleeping! 😴")
+        st.markdown(f"### The portal is closed right now! (Time: {current_time_str})")
+        st.markdown("""
+            <p style="font-size: 18px; color: #4b5563;">
+            Sorry! You cannot enter the website at this time.<br>
+            Our classes and games are open only from <b>12:00 PM to 10:00 PM</b>.<br><br>
+            Go get some rest and come back tomorrow! 🌙✨
+            </p>
+        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+    st.stop()
+
+# ==============================================================================
+# ادامه کد اصلی سایت (فقط در ساعات مجاز 12 ظهر تا 10 شب)
+# ==============================================================================
+
 ALLOWED_STUDENTS = ["Sara", "Ali", "Mohammad", "Setareh", "Nafiseh", "Jamil", "Bahar", "Reza", "Darya"]
 
-# --- تمام ۱۳ ساختار آموزشی به ترتیب مراحل ---
 TENSE_LEVELS = [
     "Simple Present",
     "Present Continuous",
@@ -62,7 +130,7 @@ TENSE_LEVELS = [
     "Future Perfect Continuous"
 ]
 
-# --- سیستم ذخیره دائمی پیشرفت دانش‌آموزان ---
+# --- سیستم ذخیره دائمی پیشرفت ---
 PROGRESS_FILE = "student_progress.json"
 
 def load_all_progress():
@@ -84,7 +152,7 @@ def save_student_progress(student_name, unlocked_index, scores, quiz_variant):
     with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-# --- بانک جامع ۲۰ سوالی کامل برای هر ۱۳ زمان (۱۰ سوال A و ۱۰ سوال B) ---
+# --- بانک سوالات ---
 RAW_QUESTIONS = {
     "Simple Present": {
         "A": [
@@ -166,7 +234,6 @@ RAW_QUESTIONS = {
     }
 }
 
-# تکمیل بقیه زمان‌ها به صورت پیش‌فرض کامل برای اینکه خالی نباشند
 for t in TENSE_LEVELS:
     if t not in RAW_QUESTIONS:
         RAW_QUESTIONS[t] = {
@@ -180,7 +247,6 @@ for t in TENSE_LEVELS:
             ]
         }
 
-# --- مدیریت وضعیت و پیشرفت دانش‌آموز ---
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
@@ -196,6 +262,13 @@ if not st.session_state.logged_in:
         if clean_name in ALLOWED_STUDENTS:
             st.session_state.logged_in = True
             st.session_state.student_name = clean_name
+            
+            # ارسال ایمیل اعلان ورود زبان‌آموز
+            login_time = datetime.now(tehran_tz).strftime("%Y-%m-%d | %H:%M")
+            send_email_notification(
+                subject=f"🔔 Student Login Alert: {clean_name}",
+                body=f"Hello Teacher!\n\nStudent '{clean_name}' just logged into the portal.\nTime (Tehran): {login_time}"
+            )
             
             all_data = load_all_progress()
             student_data = all_data.get(clean_name, {})
@@ -219,7 +292,7 @@ else:
         st.session_state.scores = saved.get("scores", st.session_state.scores)
         st.session_state.quiz_variant = saved.get("quiz_variant", st.session_state.quiz_variant)
 
-    # --- منوی کناری (Sidebar) ---
+    # --- منوی کناری ---
     with st.sidebar:
         st.image("https://img.icons8.com/color/96/student-male.png", width=80)
         st.markdown(f"### Hi, {st.session_state.student_name}! 🌸")
@@ -357,7 +430,6 @@ else:
                 
                 st.balloons()
                 
-                # --- بخش موفقیت با گربه‌ی خوشحال یا دختر تاییدکننده ---
                 col_cat_ok, col_msg_ok = st.columns([1, 4])
                 with col_cat_ok:
                     st.image("https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&auto=format&fit=crop&q=80", width=120)
@@ -379,7 +451,6 @@ else:
                 )
                 st.error(f"📉 You scored **{percentage}%**. You need at least **75%** to pass.")
 
-            # --- بخش اشتباهات با گربه‌ی با‌تعجب و ملوس ---
             if mistakes:
                 st.write("---")
                 col_cat, col_msg = st.columns([1, 4])
@@ -454,31 +525,14 @@ else:
         
         if st.button("Send Message"):
             if teacher_msg.strip():
-                try:
-                    import smtplib
-                    from email.mime.text import MIMEText
-                    from email.mime.multipart import MIMEMultipart
-
-                    sender_email = "Nafiseh.sabouri19@gmail.com"
-                    app_password = "cfpu kvoj surx oafx"  # رمز اختصاصی شما
-                    
-                    msg = MIMEMultipart()
-                    msg['From'] = sender_email
-                    msg['To'] = sender_email
-                    msg['Subject'] = f"New Message from Student: {student_sender} 🌸"
-                    
-                    body = f"Student Name: {student_sender}\n\nMessage:\n{teacher_msg}"
-                    msg.attach(MIMEText(body, 'plain'))
-                    
-                    server = smtplib.SMTP('smtp.gmail.com', 587)
-                    server.starttls()
-                    server.login(sender_email, app_password)
-                    server.send_message(msg)
-                    server.quit()
-                    
+                ok = send_email_notification(
+                    subject=f"New Message from Student: {student_sender} 🌸",
+                    body=f"Student Name: {student_sender}\n\nMessage:\n{teacher_msg}"
+                )
+                if ok:
                     st.success("Your message has been sent to the teacher successfully! ✉️✨")
-                except Exception as e:
-                    st.error(f"Failed to send email. Error: {e}")
+                else:
+                    st.error("Failed to send email. Please try again.")
             else:
                 st.warning("Please write a message first.")
 
@@ -491,30 +545,13 @@ else:
         
         if st.button("Submit Idea"):
             if idea_msg.strip():
-                try:
-                    import smtplib
-                    from email.mime.text import MIMEText
-                    from email.mime.multipart import MIMEMultipart
-
-                    sender_email = "Nafiseh.sabouri19@gmail.com"
-                    app_password = "cfpu kvoj surx oafx"  # رمز اختصاصی شما
-                    
-                    msg = MIMEMultipart()
-                    msg['From'] = sender_email
-                    msg['To'] = sender_email
-                    msg['Subject'] = f"New Idea/Suggestion from Student: {student_sender} 💡"
-                    
-                    body = f"Student Name: {student_sender}\n\nIdea / Suggestion:\n{idea_msg}"
-                    msg.attach(MIMEText(body, 'plain'))
-                    
-                    server = smtplib.SMTP('smtp.gmail.com', 587)
-                    server.starttls()
-                    server.login(sender_email, app_password)
-                    server.send_message(msg)
-                    server.quit()
-                    
+                ok = send_email_notification(
+                    subject=f"New Idea/Suggestion from Student: {student_sender} 💡",
+                    body=f"Student Name: {student_sender}\n\nIdea / Suggestion:\n{idea_msg}"
+                )
+                if ok:
                     st.success("Thank you! Your suggestion was sent to the teacher successfully! 🚀✨")
-                except Exception as e:
-                    st.error(f"Failed to send email. Error: {e}")
+                else:
+                    st.error("Failed to send email. Please try again.")
             else:
                 st.warning("Please write your idea first.")
