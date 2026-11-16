@@ -35,7 +35,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- بخش مدیریت ورود (Authentication) ---
-ALLOWED_STUDENTS = ["Sara", "Ali", "Mohammad", "Setareh"]
+ALLOWED_STUDENTS = ["Jamil", "Nafiseh"]
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
