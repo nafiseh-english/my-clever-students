@@ -7,29 +7,29 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for Blue Theme and Tabs Styling
+# Custom CSS for Soft Pink Theme Styling
 st.markdown("""
     <style>
     .stApp {
-        background-color: #f0f4f8;
+        background-color: #fdf2f8;
     }
     .stButton>button {
-        background-color: #3b82f6;
+        background-color: #db2777;
         color: white;
         border-radius: 8px;
         padding: 0.5rem 1rem;
         border: none;
     }
     .stButton>button:hover {
-        background-color: #2563eb;
+        background-color: #be185d;
         color: white;
     }
     h1, h2, h3 {
-        color: #1e3a8a;
+        color: #9d174d;
     }
     /* Style for active tab */
     [data-baseweb="tab-highlight"] {
-        background-color: #3b82f6 !important;
+        background-color: #db2777 !important;
     }
     </style>
 """, unsafe_allow_html=True)
