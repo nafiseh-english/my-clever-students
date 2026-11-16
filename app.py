@@ -99,9 +99,33 @@ else:
             st.warning("⭐ **He / She / It + Verb + s/es**\n- She **plays** football.\n- He **watches** TV.")
             
         st.write("---")
-        st.markdown("#### 🎯 Your Study Checklist:")
-        st.checkbox("I understood when to add 's' or 'es'.")
-        st.checkbox("I wrote 3 sentences about my daily routine.")
+        st.markdown("#### 🎯 Your Self-Check (Did you learn it?):")
+        
+        # سوال اول با فیدبک تعاملی
+        check1 = st.radio(
+            "Did you fully understand when to add 's' or 'es' for He/She/It?", 
+            ["Select an option...", "Yes", "No"],
+            key="check1"
+        )
+        
+        if check1 == "Yes":
+            st.success("😁 Brilliant! High five! 🥳 You've mastered this rule.")
+        elif check1 == "No":
+            st.warning("🔍 No worries at all! Let's take a closer look: remember we add 's' or 'es' only for third-person singular (He, She, It) in positive sentences. You can review the boxes above!")
+
+        st.write("")
+        
+        # سوال دوم با فیدبک تعاملی
+        check2 = st.radio(
+            "Did you write 3 sentences about your daily routine?", 
+            ["Select an option...", "Yes", "No"],
+            key="check2"
+        )
+        
+        if check2 == "Yes":
+            st.success("🌟 Awesome! You are super active and doing a great job! 🎉")
+        elif check2 == "No":
+            st.warning("💪 Let's try writing just one sentence about what you do every morning (e.g., *I wake up at 8 o'clock.*). You can do it!")
 
     elif menu_selection == "Review":
         st.title("📚 Quick Review: Simple Present")
