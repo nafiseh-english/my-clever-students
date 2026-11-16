@@ -84,8 +84,7 @@ current_hour = now_tehran.hour
 current_time_str = now_tehran.strftime("%H:%M")
 
 # بازه مجاز دسترسی: از ساعت 12 ظهر (12) تا 10 شب (22)
-IS_OPEN = (12 <= current_hour < 22)
-
+IS_OPEN = True
 # --- نمایش صفحه تعطیلی سایت خارج از ساعت مجاز ---
 if not IS_OPEN:
     col1, col2, col3 = st.columns([1, 2, 1])
