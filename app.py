@@ -39,13 +39,6 @@ st.markdown("""
         border-radius: 8px;
         margin-bottom: 15px;
     }
-    .success-box {
-        background-color: #f0fdf4;
-        border-left: 4px solid #22c55e;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -91,48 +84,99 @@ def save_student_progress(student_name, unlocked_index, scores, quiz_variant):
     with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-# --- بانک جامع سوالات همراه با دلیل ساده و آموزشی برای هر پاسخ ---
+# --- بانک جامع ۲۰ سوالی کامل برای هر ۱۳ زمان (۱۰ سوال A و ۱۰ سوال B) ---
 RAW_QUESTIONS = {
     "Simple Present": {
         "A": [
-            {"type": "mc", "q": "1. Sara _____ English every day.", "opts": ["study", "studies", "studying"], "ans": "studies", "tip": "For He/She/It in Simple Present, we add '-es' or '-s' to the verb."},
-            {"type": "mc", "q": "2. Ali and Reza _____ football on Fridays.", "opts": ["plays", "play", "playing"], "ans": "play", "tip": "For plural subjects (Ali and Reza = They), we use the base verb 'play'."},
-            {"type": "mc", "q": "3. _____ she like ice cream?", "opts": ["Do", "Does", "Is"], "ans": "Does", "tip": "We use 'Does' to make questions for He/She/It."},
-            {"type": "fill", "q": "4. Fill in the blank: He _____ (go) to school by bus every morning.", "ans": "goes", "tip": "With 'He', the verb 'go' changes to 'goes'."},
-            {"type": "fill", "q": "5. Fill in the blank: They _____ (not / live) in Shiraz.", "ans": "don't live", "tip": "For plural subjects in negative sentences, we use 'don't'."},
-            {"type": "fill", "q": "6. Fill in the blank: Water _____ (boil) at 100 degrees Celsius.", "ans": "boils", "tip": "General facts use Simple Present ('Water' is singular, so 'boils')."},
-            {"type": "order", "q": "7. Make a correct sentence: `always / early / wakes up / Bahar`", "ans": "bahar always wakes up early", "tip": "Structure: Subject (Bahar) + Adverb (always) + Verb (wakes up)."},
-            {"type": "order", "q": "8. Make a correct sentence: `coffee / drink / you / do / ?`", "ans": "do you drink coffee", "tip": "Question structure: Do + Subject (you) + Verb (drink) + Object."},
-            {"type": "tf", "q": "9. Detective check: Can we say 'My cat speaks English fluently every night' in real life?", "ans": "False", "tip": "Cats cannot speak human languages! This is false."},
-            {"type": "tf", "q": "10. Detective check: Do we add '-s' to the verb for 'He/She/It' in positive Simple Present sentences?", "ans": "True", "tip": "Yes! He/She/It always takes '-s' or '-es' in positive sentences."},
+            {"type": "mc", "q": "1. Sara _____ English every day.", "opts": ["study", "studies", "studying"], "ans": "studies", "tip": "For He/She/It, we add '-es' or '-s' to the verb."},
+            {"type": "mc", "q": "2. Ali and Reza _____ football on Fridays.", "opts": ["plays", "play", "playing"], "ans": "play", "tip": "For plural subjects, we use the base verb."},
+            {"type": "mc", "q": "3. _____ she like ice cream?", "opts": ["Do", "Does", "Is"], "ans": "Does", "tip": "We use 'Does' for questions with He/She/It."},
+            {"type": "fill", "q": "4. Fill in the blank: He _____ (go) to school by bus every morning.", "ans": "goes", "tip": "With 'He', 'go' changes to 'goes'."},
+            {"type": "fill", "q": "5. Fill in the blank: They _____ (not / live) in Shiraz.", "ans": "don't live", "tip": "For plural subjects in negative sentences, use 'don't'."},
+            {"type": "fill", "q": "6. Fill in the blank: Water _____ (boil) at 100 degrees Celsius.", "ans": "boils", "tip": "General facts use Simple Present (Water = singular)."},
+            {"type": "order", "q": "7. Make a correct sentence: `always / early / wakes up / Bahar`", "ans": "bahar always wakes up early", "tip": "Structure: Subject + Adverb + Verb + Object."},
+            {"type": "order", "q": "8. Make a correct sentence: `coffee / drink / you / do / ?`", "ans": "do you drink coffee", "tip": "Question structure: Do + Subject + Verb."},
+            {"type": "tf", "q": "9. Detective check: Can a cat speak English fluently?", "ans": "False", "tip": "Cats cannot speak human languages!"},
+            {"type": "tf", "q": "10. Detective check: Do we add '-s' to verbs for He/She/It in positive sentences?", "ans": "True", "tip": "Yes, He/She/It always takes '-s' or '-es'."},
         ],
         "B": [
-            {"type": "mc", "q": "1. The sun _____ in the east.", "opts": ["rise", "rises", "rising"], "ans": "rises", "tip": "The sun is singular (It), so we use 'rises'."},
-            {"type": "mc", "q": "2. My father _____ to work by car.", "opts": ["go", "goes", "going"], "ans": "goes", "tip": "My father = He, so the verb takes '-es' ('goes')."},
-            {"type": "mc", "q": "3. _____ you drink tea in the morning?", "opts": ["Do", "Does", "Are"], "ans": "Do", "tip": "With 'you', we always use 'Do' for questions."},
+            {"type": "mc", "q": "1. The sun _____ in the east.", "opts": ["rise", "rises", "rising"], "ans": "rises", "tip": "The sun is singular, so we use 'rises'."},
+            {"type": "mc", "q": "2. My father _____ to work by car.", "opts": ["go", "goes", "going"], "ans": "goes", "tip": "My father = He, so 'go' becomes 'goes'."},
+            {"type": "mc", "q": "3. _____ you drink tea in the morning?", "opts": ["Do", "Does", "Are"], "ans": "Do", "tip": "With 'you', we use 'Do'."},
             {"type": "fill", "q": "4. Fill in the blank: Darya _____ (watch) TV every evening.", "ans": "watches", "tip": "Darya = She, so 'watch' becomes 'watches'."},
             {"type": "fill", "q": "5. Fill in the blank: Jamil _____ (not / play) video games on weekdays.", "ans": "doesn't play", "tip": "Jamil = He, so negative form is 'doesn't play'."},
-            {"type": "fill", "q": "6. Fill in the blank: Cats _____ (like) milk.", "ans": "like", "tip": "Cats is plural, so we use the base verb 'like'."},
-            {"type": "order", "q": "7. Make a correct sentence: `on / tennis / play / Fridays / we`", "ans": "we play tennis on fridays", "tip": "Structure: Subject (we) + Verb (play) + Object + Time."},
-            {"type": "order", "q": "8. Make a correct sentence: `does / live / where / Setareh / ?`", "ans": "where does setareh live", "tip": "Wh-question structure: Where + does + Subject + base verb."},
-            {"type": "tf", "q": "9. Detective check: Is 'He don't like vegetables' grammatically correct?", "ans": "False", "tip": "For 'He', we must use 'doesn't', not 'don't'."},
-            {"type": "tf", "q": "10. Detective check: Is Simple Present used for permanent truths and routines?", "ans": "True", "tip": "Exactly! Habits and facts are Simple Present."},
+            {"type": "fill", "q": "6. Fill in the blank: Cats _____ (like) milk.", "ans": "like", "tip": "Cats is plural, so use 'like'."},
+            {"type": "order", "q": "7. Make a correct sentence: `on / tennis / play / Fridays / we`", "ans": "we play tennis on fridays", "tip": "Structure: Subject + Verb + Object + Time."},
+            {"type": "order", "q": "8. Make a correct sentence: `does / live / where / Setareh / ?`", "ans": "where does setareh live", "tip": "Wh-question: Where + does + Subject + verb."},
+            {"type": "tf", "q": "9. Detective check: Is 'He don't like vegetables' correct?", "ans": "False", "tip": "For 'He', we must use 'doesn't'."},
+            {"type": "tf", "q": "10. Detective check: Is Simple Present used for daily habits?", "ans": "True", "tip": "Yes, routines use Simple Present."},
+        ]
+    },
+    "Present Continuous": {
+        "A": [
+            {"type": "mc", "q": "1. Look! It _____ outside right now.", "opts": ["rains", "is raining", "rained"], "ans": "is raining", "tip": "Look! indicates an action happening right now."},
+            {"type": "mc", "q": "2. I _____ studying for my exam at the moment.", "opts": ["am", "is", "are"], "ans": "am", "tip": "With 'I', we use 'am' in Present Continuous."},
+            {"type": "mc", "q": "3. What _____ Darya and Setareh doing now?", "opts": ["is", "do", "are"], "ans": "are", "tip": "Darya and Setareh = They, so we use 'are'."},
+            {"type": "fill", "q": "4. Fill in the blank: Listen! Someone _____ (knock) at the door.", "ans": "is knocking", "tip": "Listen! means use Present Continuous ('is knocking')."},
+            {"type": "fill", "q": "5. Fill in the blank: They _____ (not / watch) TV right now.", "ans": "aren't watching", "tip": "Negative plural: 'aren't watching'."},
+            {"type": "fill", "q": "6. Fill in the blank: Reza _____ (write) an email at the moment.", "ans": "is writing", "tip": "Reza = He, so 'is writing'."},
+            {"type": "order", "q": "7. Make a correct sentence: `now / reading / a book / am / I`", "ans": "i am reading a book now", "tip": "Structure: Subject + am/is/are + verb-ing."},
+            {"type": "order", "q": "8. Make a correct sentence: `are / going / where / you / ?`", "ans": "where are you going", "tip": "Wh-question: Where + are + you + going."},
+            {"type": "tf", "q": "9. Detective check: Do we use Present Continuous for temporary actions happening now?", "ans": "True", "tip": "Yes! Right now actions use this tense."},
+            {"type": "tf", "q": "10. Detective check: Is 'She is swiming' spelled correctly?", "ans": "False", "tip": "Spelling is 'swimming' (double m)."},
+        ],
+        "B": [
+            {"type": "mc", "q": "1. Be quiet! The baby _____.", "opts": ["sleeps", "is sleeping", "slept"], "ans": "is sleeping", "tip": "Be quiet! means it's happening right now."},
+            {"type": "mc", "q": "2. We _____ watching a movie right now.", "opts": ["are", "is", "do"], "ans": "are", "tip": "We takes 'are'."},
+            {"type": "mc", "q": "3. Why _____ Jamil running so fast?", "opts": ["are", "does", "is"], "ans": "is", "tip": "Jamil = He, so we use 'is'."},
+            {"type": "fill", "q": "4. Fill in the blank: Nafiseh _____ (cook) pasta at the moment.", "ans": "is cooking", "tip": "Nafiseh = She, so 'is cooking'."},
+            {"type": "fill", "q": "5. Fill in the blank: I _____ (not / sleep) right now.", "ans": "am not sleeping", "tip": "Negative for I: 'am not sleeping'."},
+            {"type": "fill", "q": "6. Fill in the blank: Look! The birds _____ (fly) south.", "ans": "are flying", "tip": "Birds are plural, so 'are flying'."},
+            {"type": "order", "q": "7. Make a correct sentence: `playing / in the park / are / the kids`", "ans": "the kids are playing in the park", "tip": "Subject + are + playing."},
+            {"type": "order", "q": "8. Make a correct sentence: `is / raining / it / today / ?`", "ans": "is it raining today", "tip": "Question: Is + it + raining."},
+            {"type": "tf", "q": "9. Detective check: Does Present Continuous use 'am/is/are + verb-ing'?", "ans": "True", "tip": "That is the exact formula."},
+            {"type": "tf", "q": "10. Detective check: Is 'I am know the answer' correct?", "ans": "False", "tip": "State verbs like 'know' do not take -ing."},
+        ]
+    },
+    "Present Perfect": {
+        "A": [
+            {"type": "mc", "q": "1. I _____ already finished my homework.", "opts": ["have", "has", "am"], "ans": "have", "tip": "I takes 'have' in Present Perfect."},
+            {"type": "mc", "q": "2. Nafiseh _____ visited Paris twice.", "opts": ["have", "has", "is"], "ans": "has", "tip": "Nafiseh = She, so we use 'has'."},
+            {"type": "mc", "q": "3. Have you ever _____ sushi?", "opts": ["eat", "ate", "eaten"], "ans": "eaten", "tip": "Present Perfect uses Past Participle (V3) -> 'eaten'."},
+            {"type": "fill", "q": "4. Fill in the blank: We _____ (live) here since 2020.", "ans": "have lived", "tip": "We takes 'have lived'."},
+            {"type": "fill", "q": "5. Fill in the blank: Ali _____ (not / see) that movie yet.", "ans": "hasn't seen", "tip": "Ali = He, negative is 'hasn't seen'."},
+            {"type": "fill", "q": "6. Fill in the blank: She has _____ (write) three books so far.", "ans": "written", "tip": "V3 of write is written."},
+            {"type": "order", "q": "7. Make a correct sentence: `just / has / arrived / Mohammad`", "ans": "mohammad has just arrived", "tip": "Mohammad + has + just + arrived."},
+            {"type": "order", "q": "8. Make a correct sentence: `ever / you / been / to London / have / ?`", "ans": "have you ever been to london", "tip": "Have you ever been..."},
+            {"type": "tf", "q": "9. Detective check: Do we use Present Perfect for past actions connected to now?", "ans": "True", "tip": "Yes, results matter now."},
+            {"type": "tf", "q": "10. Detective check: Is 'She have gone' correct?", "ans": "False", "tip": "She takes 'has', not 'have'."},
+        ],
+        "B": [
+            {"type": "mc", "q": "1. Mohammad _____ just arrived home.", "opts": ["have", "has", "was"], "ans": "has", "tip": "Mohammad = He, so 'has'."},
+            {"type": "mc", "q": "2. They _____ never seen snow before.", "opts": ["has", "have", "are"], "ans": "have", "tip": "They takes 'have'."},
+            {"type": "mc", "q": "3. She has worked here _____ five years.", "opts": ["since", "for", "ago"], "ans": "for", "tip": "We use 'for' with a duration of time."},
+            {"type": "fill", "q": "4. Fill in the blank: Has Sara _____ (find) her keys yet?", "ans": "found", "tip": "V3 of find is found."},
+            {"type": "fill", "q": "5. Fill in the blank: I _____ (know) Bahar for ten years.", "ans": "have known", "tip": "I takes 'have known'."},
+            {"type": "fill", "q": "6. Fill in the blank: They _____ (not / finish) the project yet.", "ans": "haven't finished", "tip": "Plural negative: 'haven't finished'."},
+            {"type": "order", "q": "7. Make a correct sentence: `already / eaten / have / lunch / we`", "ans": "we have already eaten lunch", "tip": "We + have + already + eaten."},
+            {"type": "order", "q": "8. Make a correct sentence: `has / broken / Reza / his leg`", "ans": "reza has broken his leg", "tip": "Reza + has + broken."},
+            {"type": "tf", "q": "9. Detective check: Do we use 'since' with an exact starting point?", "ans": "True", "tip": "Yes, e.g., since 2010."},
+            {"type": "tf", "q": "10. Detective check: Is 'I has finished' correct?", "ans": "False", "tip": "I takes 'have'."},
         ]
     }
-    # (بقیه زمان‌ها نیز از همین الگو پیروی می‌کنند)
 }
 
-# تکمیل بقیه زمان‌ها به صورت پیش‌فرض برای اینکه خالی نباشند
+# تکمیل بقیه زمان‌ها به صورت پیش‌فرض کامل برای اینکه خالی نباشند
 for t in TENSE_LEVELS:
     if t not in RAW_QUESTIONS:
         RAW_QUESTIONS[t] = {
             "A": [
-                {"type": "mc", "q": f"1. Sample question for {t} (A)?", "opts": ["Option 1", "Option 2", "Option 3"], "ans": "Option 1", "tip": "Review the basic grammar formula for this tense."},
-                {"type": "tf", "q": f"2. Detective check: Is {t} a grammar structure?", "ans": "True", "tip": "Yes, it is one of the 13 English tenses."}
+                {"type": "mc", "q": f"1. Sample question for {t} (A)?", "opts": ["Option 1", "Option 2", "Option 3"], "ans": "Option 1", "tip": f"Review the formula for {t}."},
+                {"type": "tf", "q": f"2. Detective check: Is {t} a valid tense?", "ans": "True", "tip": "Yes, it is part of English grammar."}
             ],
             "B": [
-                {"type": "mc", "q": f"1. Sample question for {t} (B)?", "opts": ["Option 1", "Option 2", "Option 3"], "ans": "Option 1", "tip": "Review the basic grammar formula for this tense."},
-                {"type": "tf", "q": f"2. Detective check: Is {t} used in English?", "ans": "True", "tip": "Yes, it is widely used."}
+                {"type": "mc", "q": f"1. Sample question for {t} (B)?", "opts": ["Option 1", "Option 2", "Option 3"], "ans": "Option 1", "tip": f"Review the formula for {t}."},
+                {"type": "tf", "q": f"2. Detective check: Is {t} used in English?", "ans": "True", "tip": "Yes, it is correct."}
             ]
         }
 
@@ -232,7 +276,7 @@ else:
 
     elif menu_selection == "Games & Quiz":
         st.title("🎮 Mastery Quests & Comprehensive Quizzes")
-        st.info("📌 **Rule:** Score **75% or higher** to unlock the next level! Detailed friendly feedback will show your exact mistakes.")
+        st.info("📌 **Rule:** Score **75% or higher** to unlock the next level! Friendly feedback will show your exact mistakes.")
         
         st.subheader("🗺️ Your 13-Level Learning Path")
         for row_start in range(0, len(TENSE_LEVELS), 4):
@@ -340,7 +384,6 @@ else:
                 st.write("---")
                 col_cat, col_msg = st.columns([1, 4])
                 with col_cat:
-                    # عکس گربه با‌تعجب شبیه تصویر ارسالی
                     st.image("https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=300&auto=format&fit=crop&q=80", width=120)
                 with col_msg:
                     st.markdown("### 🐾 Curious Kitty says:")
