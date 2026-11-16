@@ -460,7 +460,7 @@ else:
                     from email.mime.multipart import MIMEMultipart
 
                     sender_email = "Nafiseh.sabouri19@gmail.com"
-                    app_password = "cfpu kvoj surx oafx"  # رمز ۱۶ رقمی جیمیل شما
+                    app_password = "cfpu kvoj surx oafx"  # رمز اختصاصی شما
                     
                     msg = MIMEMultipart()
                     msg['From'] = sender_email
@@ -484,6 +484,37 @@ else:
 
     elif menu_selection == "Ideas & Suggestions":
         st.title("💡 Ideas & Suggestions")
-        idea_msg = st.text_area("Write your suggestion...")
+        st.write("What topic or game should we add next? Share your idea:")
+        
+        student_sender = st.session_state.student_name
+        idea_msg = st.text_area("Write your suggestion here...")
+        
         if st.button("Submit Idea"):
-            st.success("Thank you! 🚀")
+            if idea_msg.strip():
+                try:
+                    import smtplib
+                    from email.mime.text import MIMEText
+                    from email.mime.multipart import MIMEMultipart
+
+                    sender_email = "Nafiseh.sabouri19@gmail.com"
+                    app_password = "cfpu kvoj surx oafx"  # رمز اختصاصی شما
+                    
+                    msg = MIMEMultipart()
+                    msg['From'] = sender_email
+                    msg['To'] = sender_email
+                    msg['Subject'] = f"New Idea/Suggestion from Student: {student_sender} 💡"
+                    
+                    body = f"Student Name: {student_sender}\n\nIdea / Suggestion:\n{idea_msg}"
+                    msg.attach(MIMEText(body, 'plain'))
+                    
+                    server = smtplib.SMTP('smtp.gmail.com', 587)
+                    server.starttls()
+                    server.login(sender_email, app_password)
+                    server.send_message(msg)
+                    server.quit()
+                    
+                    st.success("Thank you! Your suggestion was sent to the teacher successfully! 🚀✨")
+                except Exception as e:
+                    st.error(f"Failed to send email. Error: {e}")
+            else:
+                st.warning("Please write your idea first.")
