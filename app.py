@@ -36,7 +36,7 @@ st.markdown("""
 
 # --- بخش مدیریت ورود (Authentication) ---
 # لیست اسامی مجاز به انگلیسی (می‌توانید اسامی دلخواه خود را اینجا اضافه کنید)
-ALLOWED_STUDENTS = ["Jamil", "Nafiseh"]
+ALLOWED_STUDENTS = ["Jamil","Nafiseh"]
 
 # بررسی اینکه آیا کاربر قبلاً وارد شده است یا خیر
 if "logged_in" not in st.session_state:
@@ -46,11 +46,11 @@ if not st.session_state.logged_in:
     st.title("🔒 Student Login Portal")
     st.markdown("Please enter your name in English to access the portal:")
     
-    # کادر ورود نام
-    entered_name = st.text_input("Your Name (e.g., Sara):")
+    # کادر ورود نام (بدون نمایش متن بالای کادر)
+    entered_name = st.text_input("Your Name", label_visibility="collapsed")
     
     if st.button("Login"):
-        # بررسی اینکه آیا نام وارد شده در لیست مجاز هست یا خیر (حساسیت به بزرگ و کوچک بودن حروف را با .title() کنترل می‌کنیم)
+        # بررسی اینکه آیا نام وارد شده در لیست مجاز هست یا خیر
         if entered_name.strip().title() in ALLOWED_STUDENTS:
             st.session_state.logged_in = True
             st.session_state.student_name = entered_name.strip().title()
@@ -82,7 +82,6 @@ else:
     with tab3:
         st.header("Submit Your Answer")
         st.write("Write your answers or notes here to send:")
-        # نام دانش‌آموز به صورت خودکار از زمان ورود ذخیره شده است
         st.info(f"Submitting as: **{st.session_state.student_name}**")
         student_answer = st.text_area("Write your answer here...")
 
