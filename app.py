@@ -7,10 +7,10 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for Soft Blue Theme Styling
+# Custom CSS for Blue Theme and Tabs Styling
 st.markdown("""
     <style>
-    .main {
+    .stApp {
         background-color: #f0f4f8;
     }
     .stButton>button {
@@ -26,6 +26,10 @@ st.markdown("""
     }
     h1, h2, h3 {
         color: #1e3a8a;
+    }
+    /* Style for active tab */
+    [data-baseweb="tab-highlight"] {
+        background-color: #3b82f6 !important;
     }
     </style>
 """, unsafe_allow_html=True)
