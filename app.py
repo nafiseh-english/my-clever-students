@@ -34,7 +34,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- بخش مدیریت ورود (Authentication) ---
-ALLOWED_STUDENTS = ["Nafiseh","Jamil","Bahar","Reza","Ali"]
+ALLOWED_STUDENTS = ["Sara", "Ali", "Mohammad", "Setareh", "Nafiseh","Jamil","Bahar","Reza","Darya"]
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
@@ -200,29 +200,71 @@ else:
             st.markdown("- It **will rain** tomorrow.")
 
     elif menu_selection == "Games & Quiz":
-        st.title("🎯 Simple Present Challenge!")
-        st.write("Answer these 3 questions to test your grammar skills:")
+        st.title("🎮 Fun Games & Grammar Quiz")
+        st.markdown("Choose a game or quiz tab below to test your English skills!")
         
-        q1 = st.radio("1. Sara _____ English every day.", ["study", "studies", "studying"])
-        q2 = st.radio("2. Ali and Mohammad _____ football on Fridays.", ["plays", "play", "playing"])
-        q3 = st.radio("3. _____ she like ice cream?", ["Do", "Does", "Is"])
+        tab1, tab2, tab3 = st.tabs(["🎯 Grammar Quiz", "🧩 Sentence Unscrambler", "🕵️ Spot the Mistake"])
         
-        if st.button("Check My Score 🏆"):
-            score = 0
-            if q1 == "studies":
-                score += 1
-            if q2 == "play":
-                score += 1
-            if q3 == "Does":
-                score += 1
+        # --- تب اول: کوییز ---
+        with tab1:
+            st.subheader("Mixed Tenses Challenge (5 Questions)")
+            q1 = st.radio("1. Sara _____ English every day.", ["study", "studies", "studying"], key="q1")
+            q2 = st.radio("2. Look! It _____ outside right now.", ["rains", "is raining", "rained"], key="q2")
+            q3 = st.radio("3. We _____ to the cinema yesterday.", ["go", "went", "gone"], key="q3")
+            q4 = st.radio("4. I _____ already finished my homework.", ["have", "has", "am"], key="q4")
+            q5 = st.radio("5. Tomorrow, they _____ visit their grandparents.", ["will", "did", "are"], key="q5")
+            
+            if st.button("Check My Quiz Score 🏆"):
+                score = 0
+                if q1 == "studies": score += 1
+                if q2 == "is raining": score += 1
+                if q3 == "went": score += 1
+                if q4 == "have": score += 1
+                if q5 == "will": score += 1
                 
-            if score == 3:
-                st.balloons()
-                st.success(f"🎉 Amazing job, {st.session_state.student_name}! You got 3/3!")
-            elif score == 2:
-                st.info(f"👍 Good job! You got 2/3. Review the 'He/She/It' rule once more!")
-            else:
-                st.error(f"💪 You got {score}/3. Don't worry, check the Review tab and try again!")
+                if score == 5:
+                    st.balloons()
+                    st.success(f"🎉 Perfect Score, {st.session_state.student_name}! 5/5! You are a Grammar Master!")
+                elif score >= 3:
+                    st.info(f"👍 Great job! You got {score}/5. Keep practicing!")
+                else:
+                    st.error(f"💪 You got {score}/5. Check the Review tab and try again!")
+
+        # --- تب دوم: بازی مرتب کردن جملات ---
+        with tab2:
+            st.subheader("🧩 Put the words in the correct order!")
+            st.info("Scrambled words: **`football / plays / Ali / Fridays / on`**")
+            
+            user_order = st.text_input("Write the correct sentence (don't forget the period at the end!):", key="scramble1")
+            if st.button("Check Sentence ✨"):
+                cleaned = user_order.strip().lower().rstrip(".")
+                if cleaned == "ali plays football on fridays":
+                    st.balloons()
+                    st.success("🥳 Spot on! 'Ali plays football on Fridays.' is 100% correct!")
+                else:
+                    st.warning("🤔 Not quite! Hint: Start with the person's name (Subject + Verb + Object + Time).")
+
+        # --- تب سوم: بازی پیدا کردن اشتباه ---
+        with tab3:
+            st.subheader("🕵️ Find and fix the grammar mistake!")
+            st.error("❌ Incorrect Sentence: **She don't like coffee.**")
+            
+            fix_choice = st.radio(
+                "How should we fix this sentence?",
+                [
+                    "She doesn't likes coffee.",
+                    "She doesn't like coffee.",
+                    "She not like coffee."
+                ],
+                key="spot1"
+            )
+            
+            if st.button("Verify Fix 🔍"):
+                if fix_choice == "She doesn't like coffee.":
+                    st.balloons()
+                    st.success("🌟 Detective Genius! After 'doesn't', we always use the base form of the verb ('like').")
+                else:
+                    st.error("❌ Oops! Remember: 'doesn't' already has the 's', so the main verb stays simple.")
 
     elif menu_selection == "Grades per Lesson":
         st.title("📊 Grades per Lesson")
